@@ -1,0 +1,31 @@
+nav {
+    background-color: #9c27b0; /* lighter shade of purple */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+  }
+
+  .NavBar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #d8c5ff;
+    padding: 10px;
+  }
+  
+  .NavButton {
+    background-color: #6a1b9a; /* darker shade of purple */
+    color: #fff; /* white text */
+    font-family: Arial, sans-serif; /* change font family */
+    font-size: 16px; /* increase font size */
+    padding: 10px 20px; /* add padding to the buttons */
+    border: none; /* remove border */
+    border-radius: 5px; /* round the corners */
+    cursor: pointer; /* change cursor to pointer */
+  }
+  
+  .NavButton:hover {
+    background-color: #7b1fa2; /* hover color */
+  }
+  
