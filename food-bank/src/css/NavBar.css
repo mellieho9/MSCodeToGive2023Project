@@ -10,7 +10,7 @@ nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #d8c5ff;
+    background-color: #FF7A00;
     padding: 10px;
   }
   
@@ -20,7 +20,7 @@ nav {
     font-family: Arial, sans-serif; /* change font family */
     font-size: 16px; /* increase font size */
     padding: 10px 20px; /* add padding to the buttons */
-    border: none; /* remove border */
+    border: none; /* remove border *9c27b0/
     border-radius: 5px; /* round the corners */
     cursor: pointer; /* change cursor to pointer */
   }
