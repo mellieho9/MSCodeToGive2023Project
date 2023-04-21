@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+//import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer as Map, TileLayer, Marker, Popup } from "react-leaflet";
+import "../css/Map.css"
 
 function MapComponent() {
   const [markers, setMarkers] = useState([]);
@@ -15,11 +17,13 @@ function MapComponent() {
   }
 
   return (
+    <div className="MapContainer">
     <Map
       center={[51.505, -0.09]}
       zoom={13}
       onClick={handleAddMarker}
       style={{ height: "400px" }}
+      
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {markers.map((marker, index) => (
@@ -30,6 +34,7 @@ function MapComponent() {
         </Marker>
       ))}
     </Map>
+    </div>
   );
 }
 

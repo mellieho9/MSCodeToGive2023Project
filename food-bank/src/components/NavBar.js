@@ -9,7 +9,7 @@ function NavBar() {
       <Link to="/order" className="NavButton">Order</Link>
       <Link to="/feedback" className="NavButton">Feedback</Link>
       <Link to="/delivery-status" className="NavButton">Delivery Status</Link>
-      <Link to="/rating" className="NavButton">Rating</Link>
+      <Link to="/map" className="NavButton">Map</Link>
       <Link to="/inventory" className="NavButton">Inventory</Link>
       <Link to="/calendar" className="NavButton">Calendar</Link>
     </nav>
