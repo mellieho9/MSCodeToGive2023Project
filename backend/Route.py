@@ -54,9 +54,9 @@ def calculateDistance(srcPartner, destPartner):
     # Return the duration of the route
     # It comes back in seconds with an s at the end, so we remove the s and parse it to a float
     duration = float(response.json()['routes'][0]['duration'].replace('s', ''))
-    route_distance = response.json()['routes'][0]['distanceMeters']
-    polyline = response.json()['routes'][0]['polyline']['encodedPolyline']
-    return duration, route_distance, polyline
+    # route_distance = response.json()['routes'][0]['distanceMeters']
+    # polyline = response.json()['routes'][0]['polyline']['encodedPolyline']
+    return duration,  # route_distance, polyline
 
 
 # Calculates the distance from currPartner to the nextNearestPartner
@@ -65,8 +65,7 @@ def nearestUnvisited(currNode, partnerOrders, routed):
     minIdx = -1
     for index in range(routed):
         if not routed[index]:
-            d = calculateDistance(currNode.partner, currNode.partner,
-                                  partnerOrders[index].partner)
+            d = calculateDistance(currNode.partner, partnerOrders[index].partner)
             if d < min:
                 min = d
                 minIdx = index
