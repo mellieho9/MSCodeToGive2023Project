@@ -9,7 +9,7 @@ import requests
 
 # Load the API key from the .env file
 load_dotenv()
-API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
+API_KEY = os.getenv('API_KEY')
 
 
 # Calculates distance between two partner locations
@@ -51,12 +51,13 @@ def calculateDistance(srcPartner, destPartner):
     }
 
     response = requests.post(url, headers=headers, json=data)
+    json = response.json()
     # Return the duration of the route
     # It comes back in seconds with an s at the end, so we remove the s and parse it to a float
     duration = float(response.json()['routes'][0]['duration'].replace('s', ''))
     # route_distance = response.json()['routes'][0]['distanceMeters']
     # polyline = response.json()['routes'][0]['polyline']['encodedPolyline']
-    return duration,  # route_distance, polyline
+    return duration  # , route_distance, polyline
 
 
 # Calculates the distance from currPartner to the nextNearestPartner
