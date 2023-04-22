@@ -28,9 +28,9 @@ function HomePage() {
 
                    
           <p className='brief'>The Atlanta Community Food Bank is a non-profit organization that provides access to nutritious food for
-          people in need across the metro Atlanta area. They work with a network of partner agencies 
+          people in need across the metro Atlanta area. Our work with a network of partner agencies 
           and programs to distribute food to those who are struggling with hunger. 
-          Their mission is to fight hunger by engaging, educating, and empowering the community, and their vision is 
+          Our mission is to fight hunger by engaging, educating, and empowering the community, and our vision is 
           a hunger-free community. Customers can order food through the Atlanta Community Food 
           Bank's partner agencies and programs, or they can get involved by volunteering, donating,
           or for food justice.
