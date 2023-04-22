@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Map from './Map';
-import { getDeliveries, updateDeliveryStatus } from './Delivery';
+import React, { useState, useEffect } from "react";
+import { Button, Heading, List, ListItem, Text } from "@chakra-ui/react";
+import Map from "./Map";
+import { getDeliveries, updateDeliveryStatus } from "./Delivery";
 
 function Delivery() {
   const [deliveries, setDeliveries] = useState([]);
@@ -23,22 +24,30 @@ function Delivery() {
 
   return (
     <div>
-      <h1>Delivery Status</h1>
+      <Heading as="h1" size="xl">
+        Delivery Status
+      </Heading>
       <Map deliveries={deliveries} />
-      <ul>
+      <List>
         {deliveries.map((delivery) => (
-          <li key={delivery.id}>
-            <div>Delivery ID: {delivery.id}</div>
-            <div>Status: {delivery.status}</div>
-            <button onClick={() => handleDeliveryUpdate(delivery.id, 'in transit')}>
+          <ListItem key={delivery.id}>
+            <Text>Delivery ID: {delivery.id}</Text>
+            <Text>Status: {delivery.status}</Text>
+            <Button
+              colorScheme="orange"
+              onClick={() => handleDeliveryUpdate(delivery.id, "in transit")}
+            >
               Mark as In Transit
-            </button>
-            <button onClick={() => handleDeliveryUpdate(delivery.id, 'delivered')}>
+            </Button>
+            <Button
+              colorScheme="green"
+              onClick={() => handleDeliveryUpdate(delivery.id, "delivered")}
+            >
               Mark as Delivered
-            </button>
-          </li>
+            </Button>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </div>
   );
 }

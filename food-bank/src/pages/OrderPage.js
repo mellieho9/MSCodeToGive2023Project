@@ -1,10 +1,10 @@
 import React from 'react';
+import Orders from '../api/Orders';
 
 function OrderPage() {
   return (
     <div className="page">
-      <h1>ORDER PAGE</h1>
-      <p>Page content goes here.</p>
+      <Orders />
     </div>
   );
 }

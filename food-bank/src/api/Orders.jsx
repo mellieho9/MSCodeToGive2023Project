@@ -1,4 +1,19 @@
 import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  HStack,
+} from '@chakra-ui/react';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -32,47 +47,67 @@ function Orders() {
   };
 
   return (
-    <div>
-      <h1>Orders</h1>
-      <form onSubmit={handleAddOrder}>
-        <label>
-          Food Item:
-          <input
+    <Box p={4}>
+      <Heading>Orders</Heading>
+      <HStack mt="4" align="stretch" spacing="8" alignItems={"end"}>
+        <FormControl>
+          <FormLabel>Food Item</FormLabel>
+          <Input
             type="text"
             name="foodItem"
             value={newOrder.foodItem}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Quantity:
-          <input
+        </FormControl>
+        <FormControl>
+          <FormLabel>Quantity</FormLabel>
+          <Input
             type="number"
             name="quantity"
             value={newOrder.quantity}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Status:
-          <input
+        </FormControl>
+        <FormControl>
+          <FormLabel>Status</FormLabel>
+          <Input
             type="text"
             name="status"
             value={newOrder.status}
             onChange={handleInputChange}
           />
-        </label>
-        <button type="submit">Add Order</button>
-      </form>
-      <ul>
-        {orders.map((order, index) => (
-          <li key={index}>
-            {order.foodItem} - {order.quantity} - {order.status}
-            <button onClick={() => handleDeleteOrder(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+        </FormControl>
+        <Button flexShrink="0" colorScheme="orange" onClick={handleAddOrder}>
+          Add Order
+        </Button>
+      </HStack>
+      <Box mt="4">
+        <Table variant="striped" colorScheme="gray">
+          <Thead>
+            <Tr>
+              <Th>Food Item</Th>
+              <Th>Quantity</Th>
+              <Th>Status</Th>
+              <Th>Action</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {orders.map((order, index) => (
+              <Tr key={index}>
+                <Td>{order.foodItem}</Td>
+                <Td>{order.quantity}</Td>
+                <Td>{order.status}</Td>
+                <Td>
+                  <Button  colorScheme="orange" size="sm" onClick={() => handleDeleteOrder(index)}>
+                    Delete
+                  </Button>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    </Box>
   );
 }
 

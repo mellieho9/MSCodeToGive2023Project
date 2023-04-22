@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-//import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import { MapContainer as Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Stack } from "@chakra-ui/react";
 import "../css/Map.css"
 
 function MapComponent() {
@@ -17,24 +17,23 @@ function MapComponent() {
   }
 
   return (
-    <div className="MapContainer">
-    <Map
-      center={[51.505, -0.09]}
-      zoom={13}
-      onClick={handleAddMarker}
-      style={{ height: "400px" }}
-      
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {markers.map((marker, index) => (
-        <Marker key={index} position={[marker.lat, marker.lng]}>
-          <Popup>
-            Marker {index + 1}: {marker.lat}, {marker.lng}
-          </Popup>
-        </Marker>
-      ))}
-    </Map>
-    </div>
+    <Box className="MapContainer">
+      <Map
+        center={[33.753746, -84.386330]}
+        zoom={13}
+        onClick={(e) => handleAddMarker(e)}
+        style={{ height: "400px" }}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {markers.map((marker, index) => (
+          <Marker key={index} position={[marker.lat, marker.lng]} >
+            <Popup>
+              Marker {index + 1}: {marker.lat}, {marker.lng}
+            </Popup>
+          </Marker>
+        ))}
+      </Map>
+    </Box>
   );
 }
 

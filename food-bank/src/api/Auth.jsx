@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, Input, Stack } from "@chakra-ui/react";
 
 function Auth(props) {
   const [username, setUsername] = useState("");
@@ -23,23 +24,25 @@ function Auth(props) {
       {props.user ? (
         <div>
           <p>Logged in as {props.user}</p>
-          <button onClick={handleLogout}>Logout</button>
+          <Button colorScheme="orange" onClick={handleLogout}>Logout</Button>
         </div>
       ) : (
         <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleLogin}>Login</button>
+          <Stack spacing={2}>
+            <Input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button colorScheme="brand" bg="#FF7A00" onClick={handleLogin}>Login</Button>
+          </Stack>
         </div>
       )}
     </div>
