@@ -14,18 +14,18 @@ import { ChakraProvider } from '@chakra-ui/react'
 function App() {
   return (
     <ChakraProvider>
-    <div>
-      <NavBar />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/order" component={OrderPage} />
-        <Route path="/feedback" component={FeedbackPage} />
-        <Route path="/delivery-status" component={DeliveryStatusPage} />
-        <Route path="/map" component={MapPage} />
-        <Route path="/inventory" component={InventoryPage} />
-        <Route path="/calendar" component={CalendarPage} />
-      </Switch>
-    </div>
+      < div>
+        <NavBar />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/order" component={OrderPage} />
+          <Route path="/feedback" component={FeedbackPage} />
+          <Route path="/delivery-status" component={DeliveryStatusPage} />
+          <Route path="/map" component={MapPage} />
+          <Route path="/inventory" component={InventoryPage} />
+          <Route path="/calendar" component={CalendarPage} />
+        </Switch>
+      </div>
     </ChakraProvider>
   );
 }
