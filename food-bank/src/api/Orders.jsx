@@ -48,9 +48,9 @@ function Orders() {
 
   return (
     <Box p={4}>
-      <Heading>Orders</Heading>
+      <Heading py={4}>Orders</Heading>
       <HStack mt="4" align="stretch" spacing="8" alignItems={"end"}>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Food Item</FormLabel>
           <Input
             type="text"
@@ -59,7 +59,7 @@ function Orders() {
             onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Quantity</FormLabel>
           <Input
             type="number"
@@ -68,7 +68,7 @@ function Orders() {
             onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Status</FormLabel>
           <Input
             type="text"
