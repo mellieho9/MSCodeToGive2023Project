@@ -22,11 +22,8 @@ def generateData():
     CantonHighway = [30114, 30107, 30177]
     Gainesville = [30542, 30507, 30040]
     allCodes = [randomSouth, CantonHighway, Gainesville]
-    ACFB = PartnerOrder("ACFB", 30344)
-    createClusters(randomSouth, "randomSouth")
-    createClusters(CantonHighway, "CantonHighway")
-    createClusters(Gainesville, "Gainesville")
-
-    for i in partnerOrders:
-        i.partner.print()
+    createClusters(randomSouth, "randomSouth", partnerOrders)
+    createClusters(CantonHighway, "CantonHighway", partnerOrders)
+    createClusters(Gainesville, "Gainesville", partnerOrders)
+    print(len(partnerOrders))
     return partnerOrders

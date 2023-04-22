@@ -1,5 +1,5 @@
 # Have to test this class
-
+from Partner import PartnerOrder
 from geopy.distance import geodesic
 
 #Calculates distance between two partner locations
@@ -27,6 +27,7 @@ def getRoutes(partnerOrders):
     routed = [False for i in range(n)]
     i=0
     routes=[]
+    ACFB = PartnerOrder("ACFB", 30344)
     MAX_TRUCK_CAPACITY = 14000
     while(i<n):
         if routed:
@@ -37,9 +38,12 @@ def getRoutes(partnerOrders):
         currTruckCapacity=0
         while currTruckCapacity<MAX_TRUCK_CAPACITY:
             nearestUnvisitedIdx = nearestUnvisited(currNode, partnerOrders, routed)
+            if nearestUnvisitedIdx==-1:
+                break
             nextNode = partnerOrders[nearestUnvisitedIdx]
             route.append(nextNode)
             routed[nearestUnvisitedIdx] = True
             currTruckCapacity=currTruckCapacity+nextNode.quantity
+        i=i+1
     return routes
 

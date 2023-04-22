@@ -16,8 +16,5 @@ class PartnerOrder:
         self.latitude = location.latitude
         self.longitude = location.longitude
 
-    #https://www.reddit.com/r/learnpython/comments/ljqyqr/best_way_to_get_latitude_and_longitude_data_from/
-    #def set_zip_code(self, zipcode):
-
-    def print(self):
+    def printPartner(self):
         print(self.name, self.zipcode, self.latitude, self.longitude)
