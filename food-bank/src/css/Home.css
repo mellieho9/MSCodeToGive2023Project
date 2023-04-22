@@ -1,9 +1,7 @@
+
 .Home-logo{
-    position:fixed; 
-    bottom:0; 
-    left:0;
-    margin-left:30px ;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-left: 10px;
 }
 
 .gray{
@@ -38,25 +36,58 @@
     font-size: 64px;
     line-height: 50px;
     text-align: center;
+    
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
+    background-color: #FF7A00;
 }
 
 .smile{
-    display: fixed;
-    position:absolute;
-    right: 0;
-    width: 800px;
+    max-width: 800px;
+    align-self: center;
+    margin-top: 1px;
 }
 
 .centerBrief{
-    position: absolute;
-    width: 600px;
-    left: 75px;
-    top: 300px;
+    margin-top: 10px;
     font-family: 'Caveat';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 50px;
-    line-height: 63px;
+    font-size: 30px;
+    align-self: center;
+    text-shadow: 0px 4px 4px white;
+    font-weight: bold;
+    
+}
 
-    color: #000000;
+.availableFood{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Anton';
+    text-align: center;
+    font-size: 35px;
+    color: white;   
+}
+
+.button{
+    background-color: white;
+    border-radius: 10px;
+    margin-left: 10px;
+    color: #FF7A00;
+}
+button:hover{
+    background-color: #FF7A00;
+    color: white;
+}
+
+.brief{
+    margin-top: 20px;
+    margin-left: 10px;
+    font-family: 'Caveat';
+    line-height: 30px;
+    font-size: 20px;
 }
