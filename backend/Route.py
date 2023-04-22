@@ -64,13 +64,21 @@ def calculateDistance(srcPartner, destPartner):
 def nearestUnvisited(currNode, partnerOrders, routed):
     min = 10000000
     minIdx = -1
+    ACFB = PartnerOrder("ACFB", 30344)
+
     for index in range(routed):
         if not routed[index]:
             d = calculateDistance(currNode.partner, partnerOrders[index].partner)
             if d < min:
                 min = d
                 minIdx = index
-    return minIdx
+
+    distanceFromACFB = calculateDistance(ACFB, partnerOrders[minIdx].partner)
+    distanceToNext = calculateDistance(currNode.partner, partnerOrders[minIdx].partner)
+    if distanceToNext < distanceFromACFB:
+        return minIdx
+    else:
+        return -1
 
 
 # Returns all the routes for the partnerOrders that are in pending state
