@@ -24,7 +24,7 @@ const theme = extendTheme({
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formToShow, setFormToShow] = useState("login");
-
+  const [userRole, setUserRole] = useState(null);
   const handleFormSwitch = (formName) => {
     setFormToShow(formName);
   };
@@ -35,6 +35,7 @@ function App() {
   
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserRole(null);
   };
 
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="/map" component={MapPage} />
             <Route path="/inventory" component={InventoryPage} />
             <Route path="/calendar" component={CalendarPage} />
+         
           </Switch>
         </div>
       )}

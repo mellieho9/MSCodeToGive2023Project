@@ -13,31 +13,78 @@ import {
   Thead,
   Tr,
   HStack,
+  IconButton,
+  List,
+  ListItem,
+  Text
 } from '@chakra-ui/react';
+import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 
 function Orders() {
-  const [orders, setOrders] = useState([]);
-  const [newOrder, setNewOrder] = useState({
-    foodItem: '',
-    quantity: '',
-    status: '',
-  });
+  const [orders, setOrders] = useState([{ foodItem: 'Apples', quantity: 2000, total: 5, orderId: 'ABC123', deliveryDate: '2023-05-01', }, { foodItem: 'Bananas', quantity: 3000, total: 7, orderId: 'DEF456', deliveryDate: '2023-05-02', },]);
 
-  const handleInputChange = (event) => {
-    setNewOrder({
-      ...newOrder,
-      [event.target.name]: event.target.value,
-    });
+  const handleQuantityChange = (index, change) => {
+    const newOrders = [...orders];
+    const order = newOrders[index];
+    order.quantity += change;
+    order.total = Math.ceil(order.quantity / 1000);
+    setOrders(newOrders);
   };
 
-  const handleAddOrder = (event) => {
-    event.preventDefault();
-    setOrders([...orders, newOrder]);
-    setNewOrder({
-      foodItem: '',
-      quantity: '',
-      status: '',
-    });
+  const renderOrdersTable = () => {
+    return (
+      <Box mt="4">
+        <Table variant="striped" colorScheme="gray">
+          <Thead>
+            <Tr>
+              <Th>Food Item</Th>
+              <Th>Quantity (lbs)</Th>
+              <Th>Total</Th>
+              <Th>Order ID</Th>
+              <Th>Delivery Date</Th>
+              <Th>Action</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {orders.map((order, index) => (
+              <Tr key={index}>
+                <Td>{order.foodItem}</Td>
+                <Td>
+                  <HStack>
+                    <IconButton
+                      icon={<MinusIcon />}
+                      aria-label="Decrease Quantity"
+                      size="sm"
+                      isDisabled={order.quantity <= 1000}
+                      onClick={() => handleQuantityChange(index, -1000)}
+                    />
+                    <Text>{order.quantity}</Text>
+                    <IconButton
+                      icon={<AddIcon />}
+                      aria-label="Increase Quantity"
+                      size="sm"
+                      onClick={() => handleQuantityChange(index, 1000)}
+                    />
+                  </HStack>
+                </Td>
+                <Td>{order.total}</Td>
+                <Td>{order.orderId}</Td>
+                <Td>{order.deliveryDate}</Td>
+                <Td>
+                  <Button
+                    colorScheme="orange"
+                    size="sm"
+                    onClick={() => handleDeleteOrder(index)}
+                  >
+                    Delete
+                  </Button>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    );
   };
 
   const handleDeleteOrder = (index) => {
@@ -49,64 +96,34 @@ function Orders() {
   return (
     <Box p={4}>
       <Heading py={4}>Orders</Heading>
-      <HStack mt="4" align="stretch" spacing="8" alignItems={"end"}>
-        <FormControl isRequired>
-          <FormLabel>Food Item</FormLabel>
-          <Input
-            type="text"
-            name="foodItem"
-            value={newOrder.foodItem}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Quantity</FormLabel>
-          <Input
-            type="number"
-            name="quantity"
-            value={newOrder.quantity}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Status</FormLabel>
-          <Input
-            type="text"
-            name="status"
-            value={newOrder.status}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-        <Button flexShrink="0" colorScheme="orange" onClick={handleAddOrder}>
-          Add Order
-        </Button>
-      </HStack>
-      <Box mt="4">
-        <Table variant="striped" colorScheme="gray">
-          <Thead>
-            <Tr>
-              <Th>Food Item</Th>
-              <Th>Quantity</Th>
-              <Th>Status</Th>
-              <Th>Action</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {orders.map((order, index) => (
-              <Tr key={index}>
-                <Td>{order.foodItem}</Td>
-                <Td>{order.quantity}</Td>
-                <Td>{order.status}</Td>
-                <Td>
-                  <Button  colorScheme="orange" size="sm" onClick={() => handleDeleteOrder(index)}>
-                    Delete
-                  </Button>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
+      {orders.length > 0 ? (
+        renderOrdersTable()
+      ) : (
+        <Text>No orders yet.</Text>
+      )}
+      {orders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
+        <>
+          <Heading mt="8" size="md">
+            Join a Group Order
+          </Heading>
+          <FormControl mt="4">
+            <FormLabel>Order ID</FormLabel>
+            <Input type="text" />
+          </FormControl>
+          <FormControl mt="4">
+            <FormLabel>Delivery Date and Time</FormLabel>
+            <Input type="datetime-local" />
+          </FormControl>
+          <Text mt="8" fontWeight="bold">
+            Available Groups:
+          </Text>
+          <List mt="4">
+            <ListItem>Group 1</ListItem>
+            <ListItem>Group 2</ListItem>
+            <ListItem>Group 3</ListItem>
+          </List>
+        </>
+      )}
     </Box>
   );
 }

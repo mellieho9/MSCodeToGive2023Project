@@ -4,12 +4,19 @@ import { Box, Flex, Link as ChakraLink, Icon, Button, Image, useDisclosure } fro
 import { FaShoppingCart, FaTruck, FaMapMarkerAlt, FaBoxOpen, FaCalendarAlt, FaUser } from "react-icons/fa";
 import logo from '../images/logo.png';
 import PartnerInfo from "./PartnerInfo";
+import { useHistory } from "react-router-dom";
 
-function NavBar({ userRole }) {
+function NavBar({ userRole, onLogout }) {
   const isPartner = userRole === "partner";
   const isAFCB = userRole === "afcb";
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const history = useHistory();
+
+  const handleLogout = () => {
+    onLogout(); 
+    history.push("/login");
+  };
 
   const handleDrawerOpen = () => {
     setIsDrawerOpen(true);
@@ -20,6 +27,10 @@ function NavBar({ userRole }) {
     setIsDrawerOpen(false);
     onClose();
   }
+  
+
+
+
   return (
     <Flex bg="white" p="5" alignItems="center" boxShadow="md">
       <Box flex="1" display="flex" flexDirection="row">
@@ -71,7 +82,7 @@ function NavBar({ userRole }) {
             </Link>
           </>
         )}
-        <ChakraLink ml={4} mr={4} color="orange.500" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
+        <ChakraLink ml={4} mr={4} color="orange.500" _hover={{ textDecoration: "none", borderBottom: "2px solid orange"}} onClick={onLogout}>
           Logout
         </ChakraLink>
       </Box>
