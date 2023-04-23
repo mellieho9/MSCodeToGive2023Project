@@ -22,38 +22,52 @@ function Inventory() {
   const [showButtons, setShowButtons] = useState({});
 
   function addToOrder(item, quantity) {
-    const orderItem = { ...item, quantity };
-    setOrderItems([...orderItems, orderItem]);
+    const existingOrderItem = orderItems.find(orderItem => orderItem.id === item.id);
+    const orderItem = {
+      id: item.id,
+      name: item.name,
+      quantity: quantity
+    };    
+    setOrderItems(existingOrderItem ? orderItems.map(item => item.id === orderItem.id ? orderItem : item) : [...orderItems, orderItem]);
     setShowButtons({ ...showButtons, [item.id]: false });
+
   }
 
   function removeOrderItem(id) {
     setOrderItems(orderItems.filter(item => item.id !== id));
   }
 
-  function increaseQuantity(id) {
-    setOrderItems(
-      orderItems.map(item => {
-        if (item.id === id) {
-          return { ...item, quantity: item.quantity + 1 };
-        } else {
-          return item;
-        }
-      })
-    );
+  function increaseQuantity(itemId) {
+    setOrderItems(orderItems => {
+      const index = orderItems.findIndex(orderItem => orderItem.id === itemId);
+      if (index >= 0) {
+        const newOrderItems = [...orderItems];
+        newOrderItems[index] = { ...newOrderItems[index], quantity: newOrderItems[index].quantity + 1 };
+        return newOrderItems;
+      } else {
+        return [...orderItems, { id: itemId, quantity: 1 }];
+      }
+    });
   }
-
-  function decreaseQuantity(id) {
-    setOrderItems(
-      orderItems.map(item => {
-        if (item.id === id && item.quantity > 1) {
-          return { ...item, quantity: item.quantity - 1 };
+  
+  function decreaseQuantity(itemId) {
+    setOrderItems(orderItems => {
+      const index = orderItems.findIndex(orderItem => orderItem.id === itemId);
+      if (index >= 0) {
+        const newOrderItems = [...orderItems];
+        const newQuantity = newOrderItems[index].quantity - 1;
+        if (newQuantity > 0) {
+          newOrderItems[index] = { ...newOrderItems[index], quantity: newQuantity };
+          return newOrderItems;
         } else {
-          return item;
+          return newOrderItems.filter(orderItem => orderItem.id !== itemId);
         }
-      })
-    );
+      } else {
+        return orderItems;
+      }
+    });
   }
+  
 
   function toggleButtons(id) {
     setShowButtons({ ...showButtons, [id]: !showButtons[id] });
