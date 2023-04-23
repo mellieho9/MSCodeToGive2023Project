@@ -48,14 +48,27 @@ def register():
 
     conn = get_db()
     c = conn.cursor()
-    c.execute('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', (name, email, generate_password_hash(password)))
-    conn.commit()
-    conn.close()
-    response = make_response(jsonify({'message': 'Login successful!'}), 200)
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5001'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
 
-    return response
+
+    # Check if the email already exists in the database
+    c.execute('SELECT id FROM users WHERE email = ?', (email,))
+    result = c.fetchone()
+
+    if result is not None:
+        # Email already exists, return an error response
+        conn.close()
+        response = make_response(jsonify({'error': 'Email already registered.'}), 400)
+        response.status_code = 400
+        return response
+    else:
+        c.execute('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', (name, email, generate_password_hash(password)))
+        conn.commit()
+        conn.close()
+        response = make_response(jsonify({'message': 'Login successful!'}), 200)
+        response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5001'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        return response
+        
 
 @app.route('/userCredentials/login', methods=['POST'])
 def login():
@@ -84,6 +97,20 @@ def login():
         print(request.headers)
 
         return response
+    
+@app.route('/userCredentials/currentUser', methods=['GET'])
+def get_current_user():
+    if 'logged_in' in session and session['logged_in']:
+        conn = get_db()
+        c = conn.cursor()
+        c.execute('SELECT name FROM users WHERE email = ?', (session['email'],))
+        name = c.fetchone()[0]
+        conn.close()
+        return jsonify({'name': name})
+    else:
+        return jsonify({'name': ''})
+    
+
 if __name__ == '__main__':
     create_table()
     app.run(port=3000, debug=True)
