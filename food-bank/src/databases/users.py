@@ -40,7 +40,7 @@ def create_table():
         conn.close()
     
 
-@app.route('/userCredentials/register', methods=['POST'])
+@app.route('/databases/register', methods=['POST'])
 def register():
     name = request.json.get('name')
     email = request.json.get('email')
@@ -70,7 +70,7 @@ def register():
         return response
         
 
-@app.route('/userCredentials/login', methods=['POST'])
+@app.route('/databases/login', methods=['POST'])
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -98,7 +98,7 @@ def login():
 
         return response
     
-@app.route('/userCredentials/currentUser', methods=['GET'])
+@app.route('/databases/currentUser', methods=['GET'])
 def get_current_user():
     if 'logged_in' in session and session['logged_in']:
         conn = get_db()

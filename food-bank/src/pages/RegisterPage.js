@@ -30,7 +30,7 @@ export const Register = (props) => {
           return;
         }
 
-        fetch('http://localhost:3000/userCredentials/register', {
+        fetch('http://localhost:3000/databases/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
