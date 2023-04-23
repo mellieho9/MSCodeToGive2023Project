@@ -13,7 +13,7 @@ def createClusters(clusterList, clusterName, partnerOrders):
     for code in clusterList:
         #Giving quantity as 2000 for all orders temporarily. Will have to change 
         partnerOrders.append(createPartnerOrder(code, clusterName+str(i), 2000))
-        i=i+1
+        i = i+1
 
 # Generate dummy partner and order data from zipcodes of the ACFB partners
 def generateData():
