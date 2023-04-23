@@ -8,6 +8,9 @@ import MapPage from './pages/MapPage';
 import InventoryPage from './pages/InventoryPage';
 import CalendarPage from './pages/CalendarPage';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import Login from './pages/LoginPage';
+import Register from './pages/RegisterPage';
+import { useState } from "react";
 import PartnerInfo from './components/PartnerInfo';
 
 const theme = extendTheme({
@@ -19,19 +22,51 @@ const theme = extendTheme({
 })
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [formToShow, setFormToShow] = useState("login");
+
+  const handleFormSwitch = (formName) => {
+    setFormToShow(formName);
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+  
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+
   return (
     <ChakraProvider theme={theme}>
-      <div>
-        <NavBar userRole="partner" />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/order" component={OrderPage} />
-          <Route path="/delivery-status" component={DeliveryStatusPage} />
-          <Route path="/map" component={MapPage} />
-          <Route path="/inventory" component={InventoryPage} />
-          <Route path="/calendar" component={CalendarPage} />
-        </Switch>
+      <div className="App">
+        {!isLoggedIn && (
+          <>
+            {formToShow === "login" && (
+              <Login onFormSwitch={handleFormSwitch} onLogin={handleLogin} />
+            )}
+            {formToShow === "register" && (
+              <Register onFormSwitch={handleFormSwitch} />
+            )}
+          </>
+        )}
       </div>
+
+      {isLoggedIn && (
+        <div>
+          <NavBar userRole="partner" onLogout={handleLogout} />
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route path="/order" component={OrderPage} />
+            <Route path="/delivery-status" component={DeliveryStatusPage} />
+            <Route path="/map" component={MapPage} />
+            <Route path="/inventory" component={InventoryPage} />
+            <Route path="/calendar" component={CalendarPage} />
+          </Switch>
+        </div>
+      )}
+      
     </ChakraProvider>
   );
 }
