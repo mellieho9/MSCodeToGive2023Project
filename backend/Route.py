@@ -59,16 +59,15 @@ def calculateDistance(srcPartner, destPartner):
     # polyline = response.json()['routes'][0]['polyline']['encodedPolyline']
     return duration  # , route_distance, polyline
 
-
 # Calculates the distance from currPartner to the nextNearestPartner
 def nearestUnvisited(currNode, partnerOrders, routed):
     min = 10000000
     minIdx = -1
     ACFB = PartnerOrder("ACFB", 30344)
 
-    for index in range(routed):
+    for index in range(len(routed)):
         if not routed[index]:
-            d = calculateDistance(currNode.partner, partnerOrders[index].partner)
+            d = calculateDistance(currNode, partnerOrders[index].partner)
             if d < min:
                 min = d
                 minIdx = index
@@ -88,13 +87,14 @@ def getRoutes(partnerOrders):
     i = 0
     routes = []
     ACFB = PartnerOrder("ACFB", 30344)
+    
     MAX_TRUCK_CAPACITY = 14000
     while (i < n):
-        if routed:
+        if routed[i]:
             continue
         route = []
         currNode = ACFB
-        route.append(currNode)
+        print(currNode.printPartner())
         currTruckCapacity = 0
         while currTruckCapacity < MAX_TRUCK_CAPACITY:
             nearestUnvisitedIdx = nearestUnvisited(currNode, partnerOrders, routed)
@@ -104,5 +104,8 @@ def getRoutes(partnerOrders):
             route.append(nextNode)
             routed[nearestUnvisitedIdx] = True
             currTruckCapacity = currTruckCapacity + nextNode.quantity
+            currNode = nextNode.partner
+            print(currNode.printPartner())
+        routes.append(route)
         i = i + 1
     return routes
