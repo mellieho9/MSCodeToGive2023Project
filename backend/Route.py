@@ -120,7 +120,7 @@ def getRoutes(partnerOrders):
     i = 0
     routes = []
     ACFB = PartnerOrder("ACFB", 30344)
-    
+    currTruckCapacity = 0
     MAX_TRUCK_CAPACITY = 14000
     while (i < n):
         if routed[i]:
@@ -128,7 +128,6 @@ def getRoutes(partnerOrders):
         route = []
         currNode = ACFB
         print(currNode.printPartner())
-        currTruckCapacity = 0
         while currTruckCapacity < MAX_TRUCK_CAPACITY:
             nearestUnvisitedIdx = nearestUnvisited(currNode, partnerOrders, routed)
             if nearestUnvisitedIdx == -1:
@@ -136,9 +135,18 @@ def getRoutes(partnerOrders):
             nextNode = partnerOrders[nearestUnvisitedIdx]
             route.append(nextNode)
             routed[nearestUnvisitedIdx] = True
-            currTruckCapacity = currTruckCapacity + nextNode.quantity
+            currTruckCapacity += nextNode.quantity
             currNode = nextNode.partner
             print(currNode.printPartner())
         routes.append(route)
         i = i + 1
-    return routes
+        
+    if currTruckCapacity >= 6000 and currTruckCapacity <= MAX_TRUCK_CAPACITY:
+        routes.insert(0,0)
+        return routes
+    elif currTruckCapacity < 6000:
+        routes.insert(0,-1)
+        return routes
+    else:
+        routes.insert(0,1)
+        return routes
