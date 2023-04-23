@@ -1,10 +1,53 @@
 .MapContainer {
-    height: 400px;
-    width: 100%;
-    margin: 0 auto;
-   /* box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);*/
-  }
- /* 
-  .leaflet-container {
-    height: 100%;
-  }*/
+  height: 400px;
+  width: 50%;
+  margin: 0 auto;
+ /* box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);*/
+}
+/* 
+.leaflet-container {
+  height: 100%;
+}*/
+
+.create-marker-button {
+width: 150px;
+background-color: rgb(212, 145, 21);
+text-align: center;
+display: inline-block;
+font-size: 16px;
+cursor: pointer;
+border: 2px solid #ccc;
+border-radius: 4px;
+}
+
+.check-your-status {
+font-size: 40px;
+font-weight: bold;
+text-align: center;
+margin-top: 20px;
+margin-bottom: 10px;
+}
+
+.order-line {
+display: flex;
+justify-content: center;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.label-form {
+height: 30px;
+width: 150px;
+text-align: center;
+margin-right: 5px;
+}
+
+.label-input {
+height: 30px;
+width: 150px;
+padding: 10px;
+border: 2px solid #ccc;
+border-radius: 4px;
+box-sizing: border-box;
+}
+

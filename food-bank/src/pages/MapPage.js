@@ -12,12 +12,13 @@ function MapPage() {
   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
   crossorigin=""
 />
-      <h1>Welcome to the Map Page!</h1>
-      <p>
-        This page features a map component that allows you to add markers to the
-        map by clicking on it.
-      </p>
-      <MapComponent />
+      <h1 className="check-your-status">Check your status!</h1>
+      <div className="order-line">
+        <label form="order-form" className="label-form">Order Number:</label>
+        <input form="order-form" className="label-input" type="text"></input>
+      </div>
+      <MapComponent/>
+
     </div>
   );
 }
