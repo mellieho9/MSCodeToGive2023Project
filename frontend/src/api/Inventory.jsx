@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { VStack, HStack, Button, Input, FormControl, FormLabel, Grid, GridItem, Box, Heading, Image } from '@chakra-ui/react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useDispatch, getState } from 'react-redux';
 import { addOrderItemAction, removeOrderItemAction } from '../redux/action';
+import store from '../redux/store';
+
 
 const initialInventory = [
   { id: 1, name: 'Apples', quantity: 50, expiryDate: '2023-06-30', image: 'https://via.placeholder.com/150' },
@@ -24,28 +26,19 @@ function Inventory() {
   const [orderItems, setOrderItems] = useState([]);
   const [showButtons, setShowButtons] = useState({});
 
-  function addToOrder(item, quantity) {
-    const existingOrderItem = orderItems.find(orderItem => orderItem.id === item.id);
+  function addToOrder(item) {
     const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === item.id);
-    if (existingOrderItem) {
-      const updatedOrderItem = { ...existingOrderItem,  name: inventoryItem.name, quantity: existingOrderItem.quantity + quantity };
-      console.log(updatedOrderItem)
-      dispatch(addOrderItemAction(updatedOrderItem));
-    } else {
-      const newOrderItem = {
-        id: item.id,
-        name: inventoryItem.name,
-        quantity: quantity,
-      };
-      dispatch(addOrderItemAction(newOrderItem));
-    }
+    const newOrderItem = {
+      id: item.id,
+      name: inventoryItem.name,
+      quantity: 1,
+    };
+    setOrderItems([...orderItems, newOrderItem]);
+    dispatch(addOrderItemAction(newOrderItem.id,newOrderItem.name,newOrderItem.quantity));
     setShowButtons({ ...showButtons, [item.id]: false });
+    console.log('Current store state:', store.getState());
   }
   
-
-  function removeOrderItem(id) {
-    dispatch(removeOrderItemAction(id));
-  }
 
   function increaseQuantity(itemId) {
     const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === itemId);
@@ -55,6 +48,10 @@ function Inventory() {
       if (index >= 0) {
         const newOrderItems = [...orderItems];
         newOrderItems[index] = { ...newOrderItems[index],name: inventoryItem.name, quantity: newOrderItems[index].quantity + 1 };
+        console.log(newOrderItems)
+        dispatch(removeOrderItemAction(itemId));
+        dispatch(addOrderItemAction(newOrderItems[index].id,newOrderItems[index].name,newOrderItems[index].quantity+1))
+        console.log('Current store state:', store.getState());
         return newOrderItems;
       } else {
         return [...orderItems, { id: itemId, name: inventoryItem.name, quantity: 1 }];
@@ -71,8 +68,14 @@ function Inventory() {
         const newQuantity = newOrderItems[index].quantity - 1;
         if (newQuantity > 0) {
           newOrderItems[index] = { ...newOrderItems[index], name: inventoryItem.name, quantity: newQuantity };
+          dispatch(removeOrderItemAction(itemId));
+          dispatch(addOrderItemAction(newOrderItems[index].id,newOrderItems[index].name,newOrderItems[index].quantity-1))
+          console.log('Current store state:', store.getState());
+
           return newOrderItems;
         } else {
+          dispatch(removeOrderItemAction(itemId));
+          console.log('Current store state:', store.getState());
           return newOrderItems.filter(orderItem => orderItem.id !== itemId);
         }
       } else {
@@ -99,19 +102,18 @@ function Inventory() {
               <Heading size="md" mb={2}>{item.name}</Heading>
               <Box mt={2}>Available: {item.quantity}</Box>
               <Box ml={4} mb={4}>Expiry Date: {item.expiryDate}</Box>
-              {showButtons[item.id] ? (
+              {showButtons[item.id] > 0 ? (
                 <VStack  spacing="4">
                   <HStack mt={2}>
                     <Button onClick={() => increaseQuantity(item.id)} size="sm"><FaPlus /></Button>
                     <Box>{orderItems.find(orderItem => orderItem.id === item.id)?.quantity ?? 0}</Box>
                     <Button onClick={() => decreaseQuantity(item.id)} size="sm"><FaMinus /></Button>
                   </HStack> 
-                  <Button onClick={() => addToOrder(item, orderItems.find(orderItem => orderItem.id === item.id).quantity)} colorScheme="orange" ml={2}>
-                    Add to Order
-                  </Button>
                 </VStack>
               ) : (
-                <Button  onClick={() => setShowButtons({...showButtons,[item.id]: true})} colorScheme="orange" ml={2}>
+                <Button  onClick={() => {
+                  addToOrder(item);
+                  setShowButtons({...showButtons,[item.id]: true})}} colorScheme="orange" ml={2}>
                   Add to Order
                 </Button>
               )}

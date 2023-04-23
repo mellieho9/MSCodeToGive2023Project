@@ -22,7 +22,7 @@ import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 
 function Orders() {
   const [orders, setOrders] = useState([{ foodItem: 'Apples', quantity: 2000, total: 5, orderId: 'ABC123', deliveryDate: '2023-05-01', }, { foodItem: 'Bananas', quantity: 3000, total: 7, orderId: 'DEF456', deliveryDate: '2023-05-02', },]);
-
+  
   const handleQuantityChange = (index, change) => {
     const newOrders = [...orders];
     const order = newOrders[index];
