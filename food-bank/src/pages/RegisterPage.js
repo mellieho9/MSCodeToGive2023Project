@@ -1,5 +1,19 @@
 import React, { useState } from "react";
-import "../css/Login.css";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Text,
+  VStack,
+  Flex,
+  Image,
+  HStack,
+  Link
+} from '@chakra-ui/react';
+import logo from "../images/logo.png";
 
 
 export const Register = (props) => {
@@ -39,19 +53,63 @@ export const Register = (props) => {
       };
 
     return (
-        <div className="auth-form-container">
-            <h2>Register</h2>
-        <form className="register-form" onSubmit={handleSubmit}>
-            <label htmlFor="name">Full name</label>
-            <input value={name} name="name" onChange={(e) => setName(e.target.value)} id="name" placeholder="full Name" />
-            <label htmlFor="email">email</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)}type="email" placeholder="youremail@gmail.com" id="email" name="email" />
-            <label htmlFor="password">password</label>
-            <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password" />
-            <button type="submit">Register</button>
-        </form>
-        <button className="link-btn" onClick={() => handleFormSwitch("login")}>Already have an account? Login here.</button>
-    </div>
+      <Box p={20}  alignItems="center">
+      <VStack justifyContent="center" >
+        <Flex alignItems="center" mb={4}>
+          <Image src={logo} alt="FoodRoute Logo" mr={2} />
+        </Flex>
+        <Heading py={4}>Create an account</Heading>
+        <VStack spacing={4} width="75%" >
+        <FormControl>
+          <FormLabel>Full Name</FormLabel>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Full Name"
+            width="100%"
+          />
+        </FormControl>
+        <FormControl mt="4">
+          <FormLabel>Email</FormLabel>
+          <Input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="youremail@gmail.com"
+            id="email"
+            name="email"
+            width="100%"
+          />
+        </FormControl>
+        <FormControl mt="4" mb="20">
+          <FormLabel>Password</FormLabel>
+          <Input
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            type="password"
+            placeholder="********"
+            id="password"
+            name="password"
+            width="100%"
+          />
+        </FormControl>
+        <Button
+          
+          colorScheme="orange"
+          width="100%"
+          onClick={handleSubmit}
+        >
+          Register
+        </Button>
+        </VStack>
+        <HStack mt="4">
+          <Text>Already have an account?</Text>
+          <Link color="orange.500" onClick={() => handleFormSwitch("login")}>
+            Log in here.
+          </Link>
+        </HStack>
+      </VStack>
+    </Box>
     )
 }
 export default Register;
