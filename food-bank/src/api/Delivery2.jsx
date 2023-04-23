@@ -178,7 +178,7 @@ function Delivery2() {
                                     <FaTruck />
                                     <FaCheck />
                                 </HStack>
-                                <Box>
+                                <Box display="flex" flexDirection="column" alignItems="center">
                                     <Text fontSize="2xl" fontWeight="semibold">{selectedDelivery.status}</Text>
                                     <Text fontSize="lg" fontWeight="light">{selectedDelivery.eta ? `ETA: ${selectedDelivery.eta}` : "No estimated time of arrival"}</Text>
                                 </Box>

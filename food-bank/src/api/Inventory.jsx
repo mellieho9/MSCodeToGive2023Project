@@ -1,83 +1,100 @@
 import { useState } from 'react';
-import { VStack, HStack, Button, Input, FormControl, FormLabel, Table, Thead, Tbody, Tr, Th, Td, Box, Heading } from '@chakra-ui/react';
+import { VStack, HStack, Button, Input, FormControl, FormLabel, Grid, GridItem, Box, Heading, Image } from '@chakra-ui/react';
+import { FaPlus, FaMinus } from 'react-icons/fa';
 
 const initialInventory = [
-  { id: 1, name: 'Apples', quantity: 50 },
-  { id: 2, name: 'Oranges', quantity: 25 },
-  { id: 3, name: 'Bananas', quantity: 40 }
+  { id: 1, name: 'Apples', quantity: 50, expiryDate: '2023-06-30', image: 'https://via.placeholder.com/150' },
+  { id: 2, name: 'Oranges', quantity: 25, expiryDate: '2023-07-15', image: 'https://via.placeholder.com/150' },
+  { id: 3, name: 'Bananas', quantity: 40, expiryDate: '2023-07-10', image: 'https://via.placeholder.com/150' },
+  { id: 4, name: 'Grapes', quantity: 30, expiryDate: '2023-06-20', image: 'https://via.placeholder.com/150' },
+  { id: 5, name: 'Strawberries', quantity: 20, expiryDate: '2023-06-22', image: 'https://via.placeholder.com/150' },
+  { id: 6, name: 'Blueberries', quantity: 35, expiryDate: '2023-07-01', image: 'https://via.placeholder.com/150' },
+  { id: 7, name: 'Raspberries', quantity: 15, expiryDate: '2023-06-18', image: 'https://via.placeholder.com/150' },
+  { id: 8, name: 'Watermelon', quantity: 10, expiryDate: '2023-07-05', image: 'https://via.placeholder.com/150' },
+  { id: 9, name: 'Pineapple', quantity: 5, expiryDate: '2023-07-08', image: 'https://via.placeholder.com/150' },
+  { id: 10, name: 'Mango', quantity: 15, expiryDate: '2023-07-12', image: 'https://via.placeholder.com/150' }
 ];
+
 
 function Inventory() {
   const [inventory, setInventory] = useState(initialInventory);
+  const [orderItems, setOrderItems] = useState([]);
+  const [showButtons, setShowButtons] = useState({});
 
-  function addFoodItem(item) {
-    setInventory([...inventory, item]);
+  function addToOrder(item, quantity) {
+    const orderItem = { ...item, quantity };
+    setOrderItems([...orderItems, orderItem]);
+    setShowButtons({ ...showButtons, [item.id]: false });
   }
 
-  function removeFoodItem(id) {
-    setInventory(inventory.filter(item => item.id !== id));
+  function removeOrderItem(id) {
+    setOrderItems(orderItems.filter(item => item.id !== id));
   }
 
-  function updateFoodItem(id, quantity) {
-    setInventory(inventory.map(item => {
-      if (item.id === id) {
-        return { ...item, quantity };
-      } else {
-        return item;
-      }
-    }));
+  function increaseQuantity(id) {
+    setOrderItems(
+      orderItems.map(item => {
+        if (item.id === id) {
+          return { ...item, quantity: item.quantity + 1 };
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+
+  function decreaseQuantity(id) {
+    setOrderItems(
+      orderItems.map(item => {
+        if (item.id === id && item.quantity > 1) {
+          return { ...item, quantity: item.quantity - 1 };
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+
+  function toggleButtons(id) {
+    setShowButtons({ ...showButtons, [id]: !showButtons[id] });
   }
 
   return (
-    <Box p={4}>
-      <Heading py={4}>Inventory</Heading>
-      <VStack spacing="4">
-        <form onSubmit={event => {
-          event.preventDefault();
-          const id = inventory[inventory.length - 1].id + 1;
-          const name = event.target.elements.name.value;
-          const quantity = Number(event.target.elements.quantity.value);
-          addFoodItem({ id, name, quantity });
-          event.target.reset();
-        }} style={{ width: "100%" }}>
-          <HStack spacing="8" w="100%" alignItems="end">
-            <FormControl isRequired flex="1">
-              <FormLabel>Name</FormLabel>
-              <Input type="text" name="name" />
-            </FormControl>
-            <FormControl isRequired flex="1">
-              <FormLabel>Quantity</FormLabel>
-              <Input type="number" name="quantity" />
-            </FormControl>
-            <Button flexShrink="0" type="submit" ml="auto" colorScheme="orange">
-              Add Item
-            </Button>
-          </HStack>
-        </form>
-        <Box w="100%">
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>Food Item</Th>
-                <Th>Quantity</Th>
-                <Th>Actions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {inventory.map(item => (
-                <Tr key={item.id}>
-                  <Td>{item.name}</Td>
-                  <Td>{item.quantity}</Td>
-                  <Td>
-                    <Button onClick={() => removeFoodItem(item.id)}>Remove</Button>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </Box>
-      </VStack>
-    </Box>
+  <Box p={4} >
+  <Heading p={4}>Available Items</Heading>
+  <VStack spacing="4">
+    <Grid templateColumns="repeat(3, 1fr)" gap={6} w="100%">
+      {inventory.map(item => (
+        <GridItem key={item.id}>
+          <Box p={4} borderWidth="1px" borderRadius="lg" minH="400px" w="100%">
+            <VStack>
+              <Image src={item.image} alt={item.name} mb={2} />
+              <Heading size="md" mb={2}>{item.name}</Heading>
+              <Box mt={2}>Available: {item.quantity}</Box>
+              <Box ml={4} mb={4}>Expiry Date: {item.expiryDate}</Box>
+              {showButtons[item.id] ? (
+                <VStack  spacing="4">
+                  <HStack mt={2}>
+                    <Button onClick={() => increaseQuantity(item.id)} size="sm"><FaPlus /></Button>
+                    <Box>{orderItems.find(orderItem => orderItem.id === item.id)?.quantity ?? 0}</Box>
+                    <Button onClick={() => decreaseQuantity(item.id)} size="sm"><FaMinus /></Button>
+                  </HStack> 
+                  <Button onClick={() => addToOrder(item, orderItems.find(orderItem => orderItem.id === item.id).quantity)} colorScheme="orange" ml={2}>
+                    Add to Order
+                  </Button>
+                </VStack>
+              ) : (
+                <Button  onClick={() => setShowButtons({...showButtons,[item.id]: true})} colorScheme="orange" ml={2}>
+                  Add to Order
+                </Button>
+              )}
+            </VStack>
+          </Box>
+        </GridItem>
+      ))}
+    </Grid>
+  </VStack>
+</Box>
 
   );
 }

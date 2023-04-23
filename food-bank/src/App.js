@@ -8,7 +8,7 @@ import MapPage from './pages/MapPage';
 import InventoryPage from './pages/InventoryPage';
 import CalendarPage from './pages/CalendarPage';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import PartnerInfo from './pages/PartnerPage';
+import PartnerInfo from './components/PartnerInfo';
 
 const theme = extendTheme({
   colors: {
@@ -30,7 +30,6 @@ function App() {
           <Route path="/map" component={MapPage} />
           <Route path="/inventory" component={InventoryPage} />
           <Route path="/calendar" component={CalendarPage} />
-          <Route path="/profile" component={PartnerInfo} />
         </Switch>
       </div>
     </ChakraProvider>

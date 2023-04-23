@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Link as ChakraLink, Icon, Button, Image } from "@chakra-ui/react";
+import { Box, Flex, Link as ChakraLink, Icon, Button, Image, useDisclosure } from "@chakra-ui/react";
 import { FaShoppingCart, FaTruck, FaMapMarkerAlt, FaBoxOpen, FaCalendarAlt, FaUser } from "react-icons/fa";
 import logo from '../images/logo.png';
+import PartnerInfo from "./PartnerInfo";
 
 function NavBar({ userRole }) {
   const isPartner = userRole === "partner";
   const isAFCB = userRole === "afcb";
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
+    onOpen();
+  }
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+    onClose();
+  }
   return (
     <Flex bg="white" p="5" alignItems="center" boxShadow="md">
       <Box flex="1" display="flex" flexDirection="row">
@@ -36,12 +48,11 @@ function NavBar({ userRole }) {
                 Order
               </ChakraLink>
             </Link>
-            <Link to="/profile">
-              <ChakraLink display="flex" alignItems="center" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
+              <ChakraLink display="flex" alignItems="center" onClick={handleDrawerOpen} _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaUser} mr={2} />
                 Profile
               </ChakraLink>
-            </Link>
+              <PartnerInfo isDrawerOpen={isDrawerOpen} onClose={handleDrawerClose} />
           </>
         )}
         {isAFCB && (
