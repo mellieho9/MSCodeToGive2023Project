@@ -1,72 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Link as ChakraLink, Icon, Button } from "@chakra-ui/react";
-import { FaHome, FaShoppingCart, FaTruck, FaMapMarkerAlt, FaBoxOpen, FaCalendarAlt, FaUser } from "react-icons/fa";
+import { Box, Flex, Link as ChakraLink, Icon, Button, Image, useDisclosure } from "@chakra-ui/react";
+import { FaShoppingCart, FaTruck, FaMapMarkerAlt, FaBoxOpen, FaCalendarAlt, FaUser } from "react-icons/fa";
+import logo from '../images/logo.png';
+import PartnerInfo from "./PartnerInfo";
 
 function NavBar({ userRole }) {
   const isPartner = userRole === "partner";
   const isAFCB = userRole === "afcb";
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
+    onOpen();
+  }
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+    onClose();
+  }
   return (
-    <Flex bg="#FF7A00" p="5" alignItems="center">
+    <Flex bg="white" p="5" alignItems="center" boxShadow="md">
       <Box flex="1" display="flex" flexDirection="row">
         <Link to="/">
-          <ChakraLink display="flex" alignItems="center" color="white" fontWeight="bold" fontSize="2xl" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
-            <Icon as={FaHome} mr={2} />
-            Home
-          </ChakraLink>
+          <Image src={logo} alt="Logo" w="150px" cursor="pointer" />
         </Link>
       </Box>
-      <Box display="flex" flexDirection="row" alignItems="center"> 
+      <Box display="flex" flexDirection="row" alignItems="center" color="black">
         {isPartner && (
           <>
-          <Link to="/delivery-status">
-              <ChakraLink display="flex" alignItems="center" color="white" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
+            <Link to="/delivery-status">
+              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaTruck} mr={2} />
                 Delivery Status
               </ChakraLink>
             </Link>
             <Link to="/inventory">
-              <ChakraLink display="flex" alignItems="center" color="white" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
+              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaBoxOpen} mr={2} />
                 Available Items
               </ChakraLink>
             </Link>
             <Link to="/order">
-              <ChakraLink display="flex" alignItems="center" color="white" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
+              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaShoppingCart} mr={2} />
                 Order
               </ChakraLink>
             </Link>
-            
-            
-            <Link to="/profile">
-              <ChakraLink display="flex" alignItems="center" color="white" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
+              <ChakraLink display="flex" alignItems="center" onClick={handleDrawerOpen} _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaUser} mr={2} />
                 Profile
               </ChakraLink>
-            </Link>
+              <PartnerInfo isDrawerOpen={isDrawerOpen} onClose={handleDrawerClose} />
           </>
         )}
         {isAFCB && (
           <>
             <Link to="/map">
-              <ChakraLink display="flex" alignItems="center" color="white" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
+              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaMapMarkerAlt} mr={2} />
                 Map
               </ChakraLink>
             </Link>
             <Link to="/order">
-              <ChakraLink display="flex" alignItems="center" color="white" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
+              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
                 <Icon as={FaShoppingCart} mr={2} />
                 Orders
               </ChakraLink>
             </Link>
           </>
         )}
-        <Button ml={4} colorScheme="red" >
+        <ChakraLink ml={4} mr={4} color="orange.500" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
           Logout
-        </Button>
+        </ChakraLink>
       </Box>
     </Flex>
   );
