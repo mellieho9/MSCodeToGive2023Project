@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { VStack, HStack, Button, Input, FormControl, FormLabel, Grid, GridItem, Box, Heading, Image } from '@chakra-ui/react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { addOrderItemAction, removeOrderItemAction } from '../redux/action';
 
 const initialInventory = [
   { id: 1, name: 'Apples', quantity: 50, expiryDate: '2023-06-30', image: 'https://via.placeholder.com/150' },
@@ -17,47 +19,58 @@ const initialInventory = [
 
 
 function Inventory() {
-  const [inventory, setInventory] = useState(initialInventory);
+  const dispatch = useDispatch();
+  const inventory = initialInventory;
   const [orderItems, setOrderItems] = useState([]);
   const [showButtons, setShowButtons] = useState({});
 
   function addToOrder(item, quantity) {
     const existingOrderItem = orderItems.find(orderItem => orderItem.id === item.id);
-    const orderItem = {
-      id: item.id,
-      name: item.name,
-      quantity: quantity
-    };    
-    setOrderItems(existingOrderItem ? orderItems.map(item => item.id === orderItem.id ? orderItem : item) : [...orderItems, orderItem]);
+    const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === item.id);
+    if (existingOrderItem) {
+      const updatedOrderItem = { ...existingOrderItem,  name: inventoryItem.name, quantity: existingOrderItem.quantity + quantity };
+      console.log(updatedOrderItem)
+      dispatch(addOrderItemAction(updatedOrderItem));
+    } else {
+      const newOrderItem = {
+        id: item.id,
+        name: inventoryItem.name,
+        quantity: quantity,
+      };
+      dispatch(addOrderItemAction(newOrderItem));
+    }
     setShowButtons({ ...showButtons, [item.id]: false });
-
   }
+  
 
   function removeOrderItem(id) {
-    setOrderItems(orderItems.filter(item => item.id !== id));
+    dispatch(removeOrderItemAction(id));
   }
 
   function increaseQuantity(itemId) {
+    const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === itemId);
     setOrderItems(orderItems => {
       const index = orderItems.findIndex(orderItem => orderItem.id === itemId);
+      
       if (index >= 0) {
         const newOrderItems = [...orderItems];
-        newOrderItems[index] = { ...newOrderItems[index], quantity: newOrderItems[index].quantity + 1 };
+        newOrderItems[index] = { ...newOrderItems[index],name: inventoryItem.name, quantity: newOrderItems[index].quantity + 1 };
         return newOrderItems;
       } else {
-        return [...orderItems, { id: itemId, quantity: 1 }];
+        return [...orderItems, { id: itemId, name: inventoryItem.name, quantity: 1 }];
       }
     });
   }
   
   function decreaseQuantity(itemId) {
+    const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === itemId);
     setOrderItems(orderItems => {
       const index = orderItems.findIndex(orderItem => orderItem.id === itemId);
       if (index >= 0) {
         const newOrderItems = [...orderItems];
         const newQuantity = newOrderItems[index].quantity - 1;
         if (newQuantity > 0) {
-          newOrderItems[index] = { ...newOrderItems[index], quantity: newQuantity };
+          newOrderItems[index] = { ...newOrderItems[index], name: inventoryItem.name, quantity: newQuantity };
           return newOrderItems;
         } else {
           return newOrderItems.filter(orderItem => orderItem.id !== itemId);
