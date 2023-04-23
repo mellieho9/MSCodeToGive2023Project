@@ -58,7 +58,7 @@ def calculateDistance(srcPartner, destPartner):
 def nearestUnvisited(currNode, partnerOrders, routed):
     min = 10000000
     minIdx = -1
-    ACFB = Partner("ACFB", 30344)
+    ACFB = Partner("ACFB", "3400 N Desert Dr, East Point, GA 30344")
     # Make a request to the Google Maps api to get the travel time between the two locations
     url = 'https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix'
     headers = {
@@ -87,30 +87,30 @@ def nearestUnvisited(currNode, partnerOrders, routed):
     }
 
     for index in range(len(routed)):
-        if not routed[index]:
-            data['destinations'].append({
-                "waypoint": {
-                    "location": {
-                        "latLng": {
-                            "latitude": partnerOrders[index].partner.latitude,
-                            "longitude": partnerOrders[index].partner.longitude
-                        }
+        data['destinations'].append({
+            "waypoint": {
+                "location": {
+                    "latLng": {
+                        "latitude": partnerOrders[index].partner.latitude,
+                        "longitude": partnerOrders[index].partner.longitude
                     }
                 }
-            })
+            }
+        })
     response = requests.post(url, headers=headers, json=data)
     for destination in response.json():
         # parse the float from the duration string, means eliminating last character and parsing
         duration = float(destination['duration'][:-1])
         if duration < min:
+            distanceFromACFB = calculateDistance(ACFB, partnerOrders[destination['destinationIndex']].partner)
+            distanceToNext = calculateDistance(currNode, partnerOrders[destination['destinationIndex']].partner)
+            if distanceFromACFB < distanceToNext:
+                continue
             min = duration
             minIdx = destination['destinationIndex']
-    distanceFromACFB = calculateDistance(ACFB, partnerOrders[minIdx].partner)
-    distanceToNext = calculateDistance(currNode, partnerOrders[minIdx].partner)
-    if distanceToNext < distanceFromACFB:
-        return minIdx
-    else:
-        return -1
+    return minIdx
+
+
 
 
 # Returns all the routes for the partnerOrders that are in pending state
@@ -128,7 +128,7 @@ def getRoutes(partnerOrders):
         route = []
         currNode = ACFB
         print(currNode.printPartner())
-        while currTruckCapacity < MAX_TRUCK_CAPACITY or any(False for x in routed):
+        while currTruckCapacity < MAX_TRUCK_CAPACITY or all(True for x in routed):
             nearestUnvisitedIdx = nearestUnvisited(currNode, partnerOrders, routed)
             if nearestUnvisitedIdx == -1:
                 break
