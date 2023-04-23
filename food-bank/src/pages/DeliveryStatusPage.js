@@ -1,11 +1,9 @@
 import React from 'react';
+import Delivery2 from '../api/Delivery2';
 
 function DeliveryStatusPage() {
   return (
-    <div className="page">
-      <h1>DEVLEVERY STATUS</h1>
-      <p>Page content goes here.</p>
-    </div>
+    <Delivery2 />
   );
 }
 
