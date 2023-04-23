@@ -8,7 +8,6 @@ import {
   Input,
   VStack,
 } from '@chakra-ui/react';
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 function PartnerInfo() {
   // sample partner data
