@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { FaTruck, FaShippingFast, FaCheck } from "react-icons/fa";
 import Map from "./Map";
+import "../css/Table.css"
 
 function Delivery2() {
     const [selectedDelivery, setSelectedDelivery] = useState(null);
@@ -49,7 +50,7 @@ function Delivery2() {
             case "Pending":
                 return 25;
             case "In Transit":
-                return 75;
+                return 50;
             case "Delivered":
                 return 100;
             default:
@@ -107,7 +108,8 @@ function Delivery2() {
                         </Thead>
                         <Tbody>
                             {deliveries.map((delivery) => (
-                                <Tr key={delivery.id} onClick={() => setSelectedDelivery(delivery)} >
+                                <Tr key={delivery.id}
+                                    onClick={() => setSelectedDelivery(delivery)}>
                                     <Td>{delivery.id}</Td>
                                     <Td>{delivery.order}</Td>
                                     <Td>
@@ -154,11 +156,35 @@ function Delivery2() {
                         </Tbody>
                     </Table>
                     {selectedDelivery &&
-                        <VStack spacing={4}>
-                            <Progress value={progress} colorScheme="orange" />
-                            <Map delivery={selectedDelivery} />
+                        <Box
+                            spacing={5}
+                            borderRadius="md"
+                            bg="gray.100"
+                            p={5}
+                        >
 
-                        </VStack>}
+                            <Progress
+                                value={progress}
+                                colorScheme="orange"
+                                size="lg"
+                                isAnimated={true}
+                                hasStripe={true}
+                                rounded="md"
+                                bg="white"
+                            />
+                            <VStack py={4} spacing={5} >
+                                <HStack width="100%" justifyContent="space-between">
+                                    <FaShippingFast />
+                                    <FaTruck />
+                                    <FaCheck />
+                                </HStack>
+                                <Box display="flex" flexDirection="column" alignItems="center">
+                                    <Text fontSize="2xl" fontWeight="semibold">{selectedDelivery.status}</Text>
+                                    <Text fontSize="lg" fontWeight="light">{selectedDelivery.eta ? `ETA: ${selectedDelivery.eta}` : "No estimated time of arrival"}</Text>
+                                </Box>
+                                <Map delivery={selectedDelivery} />
+                            </VStack>
+                        </Box>}
                 </VStack>
 
             </Box>

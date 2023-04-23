@@ -11,7 +11,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
 import { useState } from "react";
-
+import PartnerInfo from './components/PartnerInfo';
 
 const theme = extendTheme({
   colors: {
@@ -40,7 +40,6 @@ function App() {
 
   return (
     <ChakraProvider theme={theme}>
-      
       <div className="App">
         {!isLoggedIn && (
           <>
