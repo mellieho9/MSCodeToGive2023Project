@@ -24,7 +24,7 @@ const theme = extendTheme({
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formToShow, setFormToShow] = useState("login");
-
+  const [userRole, setUserRole] = useState("partner");
   const handleFormSwitch = (formName) => {
     setFormToShow(formName);
   };
@@ -35,6 +35,7 @@ function App() {
   
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserRole(null)
   };
 
 
