@@ -18,12 +18,14 @@ def createClusters(clusterList, clusterName, partnerOrders):
 # Generate dummy partner and order data from zipcodes of the ACFB partners
 def generateData():
     partnerOrders = []
-    randomSouth = [30650, 30233, 30224, 30263]
-    CantonHighway = [30114, 30107, 30177]
-    Gainesville = [30542, 30507, 30040]
-    allCodes = [randomSouth, CantonHighway, Gainesville]
-    createClusters(randomSouth, "randomSouth", partnerOrders)
-    createClusters(CantonHighway, "CantonHighway", partnerOrders)
-    createClusters(Gainesville, "Gainesville", partnerOrders)
+    partnerLocs = ["323 Inman St, Ringgold, Georgia, 30736",
+                   "401 Peters St, Calhoun, Georgia, 30701",
+                   "1411 Rome Rd SW, Calhoun, Georgia, 30701",
+                   "140 Nason St, Rossville, Georgia, 30741",
+                   "115 W Crawford St, Dalton, Georgia, 30720",
+                   "416 S Glenwood Ave, Dalton, Georgia, 30721",
+                   "2335 Red Bud Rd NE, Calhoun, Georgia, 30701",
+                   "2026 Highway 136, Trenton, Georgia, 30752"]
+    createClusters(partnerLocs, "partnerLocs", partnerOrders)
     print(len(partnerOrders))
     return partnerOrders

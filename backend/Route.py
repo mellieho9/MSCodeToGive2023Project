@@ -92,8 +92,8 @@ def nearestUnvisited(currNode, partnerOrders, routed):
                 "waypoint": {
                     "location": {
                         "latLng": {
-                            "latitude": partnerOrders[index].latitude,
-                            "longitude": partnerOrders[index].longitude
+                            "latitude": partnerOrders[index].partner.latitude,
+                            "longitude": partnerOrders[index].partner.longitude
                         }
                     }
                 }
@@ -105,8 +105,8 @@ def nearestUnvisited(currNode, partnerOrders, routed):
         if duration < min:
             min = duration
             minIdx = destination['destinationIndex']
-    distanceFromACFB = calculateDistance(ACFB, partnerOrders[minIdx])
-    distanceToNext = calculateDistance(currNode, partnerOrders[minIdx])
+    distanceFromACFB = calculateDistance(ACFB, partnerOrders[minIdx].partner)
+    distanceToNext = calculateDistance(currNode, partnerOrders[minIdx].partner)
     if distanceToNext < distanceFromACFB:
         return minIdx
     else:
@@ -119,7 +119,7 @@ def getRoutes(partnerOrders):
     routed = [False for i in range(n)]
     i = 0
     routes = []
-    ACFB = PartnerOrder("ACFB", 30344)
+    ACFB = PartnerOrder("ACFB", "3400 N Desert Dr, East Point, GA 30344")
     currTruckCapacity = 0
     MAX_TRUCK_CAPACITY = 14000
     while (i < n):

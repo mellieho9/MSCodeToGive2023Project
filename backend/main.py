@@ -9,8 +9,8 @@ app = Flask(__name__)
 def hello_world():
     partnerOrders = generateData()
     print(len(partnerOrders))
-    #routes = getRoutes(partnerOrders)
-    # print(routes[0])
+    routes = getRoutes(partnerOrders)
+    print(routes[0])
     response = app.response_class(
         response=json.dumps([p.toJson() for p in partnerOrders]),
         status=200,
