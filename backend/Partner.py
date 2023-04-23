@@ -3,7 +3,7 @@ import geopy
 geolocator = geopy.Nominatim(user_agent="check_1", timeout=10)
 
 
-class PartnerOrder:
+class Partner:
     def __init__(self, name, address, longitude=0, latitude=0):
         self.name = name
         self.zipcode = address

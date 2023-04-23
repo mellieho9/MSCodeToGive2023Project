@@ -1,9 +1,9 @@
 from Order import Order
-from Partner import PartnerOrder
+from Partner import Partner
 
 #This method is used to generate data
 def createPartnerOrder(zipCode, name, quantity):
-    partner = PartnerOrder(name, zipCode)
+    partner = Partner(name, zipCode)
     order = Order(partner, quantity)
     return order
 

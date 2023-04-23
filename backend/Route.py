@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 
-from Partner import PartnerOrder
+from Partner import Partner
 import requests
 
 # Load the API key from the .env file
@@ -58,7 +58,7 @@ def calculateDistance(srcPartner, destPartner):
 def nearestUnvisited(currNode, partnerOrders, routed):
     min = 10000000
     minIdx = -1
-    ACFB = PartnerOrder("ACFB", 30344)
+    ACFB = Partner("ACFB", 30344)
     # Make a request to the Google Maps api to get the travel time between the two locations
     url = 'https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix'
     headers = {
@@ -119,7 +119,7 @@ def getRoutes(partnerOrders):
     routed = [False for i in range(n)]
     i = 0
     routes = []
-    ACFB = PartnerOrder("ACFB", "3400 N Desert Dr, East Point, GA 30344")
+    ACFB = Partner("ACFB", "3400 N Desert Dr, East Point, GA 30344")
     currTruckCapacity = 0
     MAX_TRUCK_CAPACITY = 14000
     while (i < n):

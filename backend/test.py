@@ -1,18 +1,18 @@
 import pytest
 from Route import nearestUnvisited, calculateDistance
-from backend.Partner import PartnerOrder
+from backend.Partner import Partner
 from Order import Order
 
 class TestRoute:
     def test_calculateDistance(self):
-        partner1 = PartnerOrder("partner1", "10001-0001")
-        partner2 = PartnerOrder("partner2", "10001-0003")
+        partner1 = Partner("partner1", "10001-0001")
+        partner2 = Partner("partner2", "10001-0003")
         assert calculateDistance(partner1, partner2) > 20
 
     def test_nearby_unvisited(self):
-        partner1 = PartnerOrder("partner1", "new york")
-        partner2 = Order(PartnerOrder("partner2", "newark"),2000)
-        partner3 = Order(PartnerOrder("partner3", "jersey city"), 2000)
+        partner1 = Partner("partner1", "new york")
+        partner2 = Order(Partner("partner2", "newark"), 2000)
+        partner3 = Order(Partner("partner3", "jersey city"), 2000)
 
         assert nearestUnvisited(partner1, [partner2, partner3], [False, False]) == 1
 
