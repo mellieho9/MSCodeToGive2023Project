@@ -4,5 +4,4 @@ Flask-Cors==3.0.10
 itsdangerous==2.0.1
 Jinja2==3.0.2
 MarkupSafe==2.0.1
-sqlite3==2.6.0
 Werkzeug==2.0.2
