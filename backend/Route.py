@@ -128,7 +128,7 @@ def getRoutes(partnerOrders):
         route = []
         currNode = ACFB
         print(currNode.printPartner())
-        while currTruckCapacity < MAX_TRUCK_CAPACITY:
+        while currTruckCapacity < MAX_TRUCK_CAPACITY or any(False for x in routed):
             nearestUnvisitedIdx = nearestUnvisited(currNode, partnerOrders, routed)
             if nearestUnvisitedIdx == -1:
                 break

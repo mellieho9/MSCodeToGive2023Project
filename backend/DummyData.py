@@ -20,12 +20,7 @@ def generateData():
     partnerOrders = []
     partnerLocs = ["323 Inman St, Ringgold, Georgia, 30736",
                    "401 Peters St, Calhoun, Georgia, 30701",
-                   "1411 Rome Rd SW, Calhoun, Georgia, 30701",
-                   "140 Nason St, Rossville, Georgia, 30741",
-                   "115 W Crawford St, Dalton, Georgia, 30720",
-                   "416 S Glenwood Ave, Dalton, Georgia, 30721",
-                   "2335 Red Bud Rd NE, Calhoun, Georgia, 30701",
-                   "2026 Highway 136, Trenton, Georgia, 30752"]
+                   "1411 Rome Rd SW, Calhoun, Georgia, 30701"]
     createClusters(partnerLocs, "partnerLocs", partnerOrders)
     print(len(partnerOrders))
     return partnerOrders

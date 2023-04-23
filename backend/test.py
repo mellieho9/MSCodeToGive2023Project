@@ -10,11 +10,11 @@ class TestRoute:
         assert calculateDistance(partner1, partner2) > 20
 
     def test_nearby_unvisited(self):
-        partner1 = Partner("partner1", "new york")
-        partner2 = Order(Partner("partner2", "newark"), 2000)
-        partner3 = Order(Partner("partner3", "jersey city"), 2000)
+        partner1 = Partner("partner1", "323 Inman St, Ringgold, Georgia, 30736")
+        partner2 = Order(Partner("partner2", "401 Peters St, Calhoun, Georgia, 30701"), 2000)
+        partner3 = Order(Partner("partner3", "1411 Rome Rd SW, Calhoun, Georgia, 30701"), 2000)
 
-        assert nearestUnvisited(partner1, [partner2, partner3], [False, False]) == 1
+        assert nearestUnvisited(partner1, [partner2, partner3], [False, False]) == 0
 
 
 if __name__ == '__main__':
