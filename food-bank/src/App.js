@@ -11,7 +11,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
 import { useState } from "react";
-
+import PartnerInfo from './components/PartnerInfo';
 
 const theme = extendTheme({
   colors: {
@@ -24,7 +24,7 @@ const theme = extendTheme({
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formToShow, setFormToShow] = useState("login");
-  const [userRole, setUserRole] = useState(null);
+  const [userRole, setUserRole] = useState("partner");
   const handleFormSwitch = (formName) => {
     setFormToShow(formName);
   };
@@ -36,12 +36,12 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserRole(null);
+
   };
 
 
   return (
     <ChakraProvider theme={theme}>
-      
       <div className="App">
         {!isLoggedIn && (
           <>
