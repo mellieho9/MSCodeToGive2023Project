@@ -58,7 +58,7 @@ def calculateDistance(srcPartner, destPartner):
 def nearestUnvisited(currNode, currNodeIdx, partnerOrders, routed):
     min = 10000000
     minIdx = -1
-    ACFB = Partner("ACFB", 30344)
+    ACFB = Partner("ACFB", "3400 N Desert Dr, East Point, GA 30344")
     # Make a request to the Google Maps api to get the travel time between the two locations
     url = 'https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix'
     headers = {
@@ -107,7 +107,7 @@ def nearestUnvisited(currNode, currNodeIdx, partnerOrders, routed):
             minIdx = destination['destinationIndex']
     distanceFromACFB = calculateDistance(ACFB, partnerOrders[minIdx].partner)
     distanceToNext = calculateDistance(currNode, partnerOrders[minIdx].partner)
-    if distanceToNext < distanceFromACFB:
+    if distanceToNext <= distanceFromACFB:
         return minIdx
     else:
         return -1
