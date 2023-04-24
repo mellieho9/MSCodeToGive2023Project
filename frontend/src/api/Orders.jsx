@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -46,7 +47,6 @@ function Orders() {
       console.log(state)
     }
   };
-
 
   const renderOrdersTable = () => {
     return (

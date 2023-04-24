@@ -5,7 +5,6 @@ import { useDispatch, getState } from 'react-redux';
 import { addOrderItemAction, removeOrderItemAction } from '../redux/action';
 import store from '../redux/store';
 
-
 const initialInventory = [
   { id: 1, name: 'Apples', quantity: 50, expiryDate: '2023-06-30', image: 'https://via.placeholder.com/150' },
   { id: 2, name: 'Oranges', quantity: 25, expiryDate: '2023-07-15', image: 'https://via.placeholder.com/150' },
@@ -38,7 +37,6 @@ function Inventory() {
     setShowButtons({ ...showButtons, [item.id]: false });
     console.log('Current store state:', store.getState());
   }
-  
 
   function increaseQuantity(itemId) {
     const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === itemId);
@@ -103,6 +101,7 @@ function Inventory() {
               <Box mt={2}>Available: {item.quantity} lbs</Box>
               <Box ml={4} mb={4}>Expiry Date: {item.expiryDate}</Box>
               {showButtons[item.id] > 0 ? (
+
                 <VStack  spacing="4">
                   <HStack mt={2}>
                     <Button onClick={() => increaseQuantity(item.id)} size="sm"><FaPlus /></Button>

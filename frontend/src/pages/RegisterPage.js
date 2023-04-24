@@ -29,8 +29,7 @@ export const Register = (props) => {
           alert('Please enter your full name.');
           return;
         }
-
-        fetch('http://localhost:3000/userCredentials/register', {
+        fetch('http://localhost:3000/backend/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
