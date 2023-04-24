@@ -37,23 +37,23 @@ function MapComponent() {
           source: new VectorSource({
             features: [
               new Feature({
-                geometry: new Point(fromLonLat([ -83.57, 34.47])),
+                geometry: new Point(fromLonLat([ -84.1929, 31.5668])),
                 name: "Marker 1",
               }),
               new Feature({
-                geometry: new Point(fromLonLat([-84.42, 33.76 ])),
+                geometry: new Point(fromLonLat([-84.4013, 31.6981])),
                 name: "Marker 2",
               }),
               new Feature({
-                geometry: new Point(fromLonLat([-83.83, 34.01 ])),
+                geometry: new Point(fromLonLat([-84.0266, 31.7184 ])),
                 name: "Marker 3",
               }),
               new Feature({
-                geometry: new Point(fromLonLat([-84.67,34.06 	])),
+                geometry: new Point(fromLonLat([-84.1566, 31.3477])),
                 name: "Marker 4",
               }),
               new Feature({
-                geometry: new Point(fromLonLat([ -82.57, 32.19 ])),
+                geometry: new Point(fromLonLat([ -84.3937, 31.5085 ])),
                 name: "Marker 5",
               }),
             ],
@@ -73,11 +73,11 @@ function MapComponent() {
             features: [
               new Feature({
                 geometry: new LineString([
-                  fromLonLat([-82.57, 32.19]),
-                  fromLonLat([-83.57, 34.47]),
-                  fromLonLat([-83.83, 34.01]),
-                  fromLonLat([-84.42, 33.76]),
-                  fromLonLat([-84.67, 34.06])
+                    fromLonLat([-84.1929, 31.5668]), 
+                    fromLonLat([-84.4013, 31.6981]), 
+                    fromLonLat([-84.0266, 31.7184]), 
+                    fromLonLat([-84.1566, 31.3477]), 
+                    fromLonLat([-84.3937, 31.5085])
                 ]),
               }),
             ],
@@ -92,8 +92,8 @@ function MapComponent() {
       ],
 
       view: new View({
-        center: fromLonLat([-83.83, 34.01]),
-        zoom: 7,
+        center: fromLonLat([-84.0266, 31.7184]),
+        zoom: 10,
       }),
     });
 

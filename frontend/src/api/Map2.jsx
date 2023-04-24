@@ -37,25 +37,18 @@ function MapComponent() {
           source: new VectorSource({
             features: [
               new Feature({
-                geometry: new Point(fromLonLat([ -83.57, 34.47])),
+                geometry: new Point(fromLonLat([ -81.0912, 32.0809])),
                 name: "Marker 1",
               }),
               new Feature({
-                geometry: new Point(fromLonLat([-84.42, 33.76 ])),
+                geometry: new Point(fromLonLat([-81.6083, 31.5469])),
                 name: "Marker 2",
               }),
               new Feature({
-                geometry: new Point(fromLonLat([-83.83, 34.01 ])),
+                geometry: new Point(fromLonLat([-82.2190, 31.1688])),
                 name: "Marker 3",
               }),
-              new Feature({
-                geometry: new Point(fromLonLat([-84.67,34.06 	])),
-                name: "Marker 4",
-              }),
-              new Feature({
-                geometry: new Point(fromLonLat([ -82.57, 32.19 ])),
-                name: "Marker 5",
-              }),
+             
             ],
           }),
           style: new Style({
@@ -68,32 +61,11 @@ function MapComponent() {
           }),
         }),
 
-        new VectorLayer({
-          source: new VectorSource({
-            features: [
-              new Feature({
-                geometry: new LineString([
-                  fromLonLat([-82.57, 32.19]),
-                  fromLonLat([-83.57, 34.47]),
-                  fromLonLat([-83.83, 34.01]),
-                  fromLonLat([-84.42, 33.76]),
-                  fromLonLat([-84.67, 34.06])
-                ]),
-              }),
-            ],
-          }),
-          style: new Style({
-            stroke: new Stroke({
-              color: "red",
-              width: 2,
-            }),
-          }),
-        }),
       ],
 
       view: new View({
-        center: fromLonLat([-83.83, 34.01]),
-        zoom: 7,
+        center: fromLonLat([-81.6083, 31.5469]),
+        zoom: 9,
       }),
     });
 

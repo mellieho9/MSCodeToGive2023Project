@@ -18,6 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { FaTruck, FaShippingFast, FaCheck } from "react-icons/fa";
 import Map from "./Map";
+import Map2 from "./Map2";
+import Map3 from "./Map3";
 import "../css/Table.css"
 
 function Delivery2() {
@@ -166,7 +168,14 @@ function Delivery2() {
 </Text>
                                     <Text fontSize="lg" fontWeight="light">{getETA(selectedDelivery["order_status"]) ? `ETA: ${getETA(selectedDelivery["order_status"])}` : "No estimated time of arrival"}</Text>
                                 </Box>
-                                <Map delivery={selectedDelivery} />
+                                
+                                {selectedDelivery["order_status"] === "delivered" && <Map delivery={selectedDelivery} />}
+                                {selectedDelivery["order_status"] === "in transit" && <Map3 delivery={selectedDelivery} />}
+                                {selectedDelivery["order_status"] === "pending" && <Map2 delivery={selectedDelivery} />}
+
+
+
+
                             </VStack>
                         </Box>}
                 </VStack>
