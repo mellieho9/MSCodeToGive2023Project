@@ -63,7 +63,7 @@ def calculate_distance(src_partner, dest_partner):
 def nearest_unvisited(current_order: Order, partner_orders: list[Order]):
     minimum = float('inf')
     closest_order = None
-    # Make a request to the Google Maps api to get the travel time between the two locations
+    # Make a request to the Google Maps api to get the travel time between all locations
     url = 'https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix'
     headers = {
         'Content-Type': 'application/json',
