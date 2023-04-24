@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -19,16 +20,32 @@ import {
   Text
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { useDispatch, getState } from 'react-redux';
+import { removeOrderItemAction, updateOrderItemAction } from '../redux/action';
+import store from '../redux/store';
 
 function Orders() {
-  const [orders, setOrders] = useState([{ foodItem: 'Apples', quantity: 2000, total: 5, orderId: 'ABC123', deliveryDate: '2023-05-01', }, { foodItem: 'Bananas', quantity: 3000, total: 7, orderId: 'DEF456', deliveryDate: '2023-05-02', },]);
+  // const [orders, setOrders] = useState([{ foodItem: 'Apples', quantity: 2000, total: 5, orderId: 'ABC123', deliveryDate: '2023-05-01', }, { foodItem: 'Bananas', quantity: 3000, total: 7, orderId: 'DEF456', deliveryDate: '2023-05-02', },]);
+  const dispatch = useDispatch();
+  const state = store.getState();
+  const orders = state.orderItems;
+  const [localOrders, setLocalOrders] = useState(orders);
+
+
+  useEffect(() => {
+    setLocalOrders(orders);
+  }, [orders]);
 
   const handleQuantityChange = (index, change) => {
-    const newOrders = [...orders];
-    const order = newOrders[index];
-    order.quantity += change;
-    order.total = Math.ceil(order.quantity / 1000);
-    setOrders(newOrders);
+    const orderToUpdate = localOrders[index];
+    if (orderToUpdate) {
+      const updatedOrder = { ...orderToUpdate, quantity: orderToUpdate.quantity + change };
+      const updatedOrders = [...localOrders];
+      updatedOrders[index] = updatedOrder;
+      setLocalOrders(updatedOrders);
+      dispatch(updateOrderItemAction(updatedOrder.id, updatedOrder.quantity));
+      console.log(state)
+    }
   };
 
   const renderOrdersTable = () => {
@@ -39,37 +56,31 @@ function Orders() {
             <Tr>
               <Th>Food Item</Th>
               <Th>Quantity (lbs)</Th>
-              <Th>Total</Th>
-              <Th>Order ID</Th>
-              <Th>Delivery Date</Th>
               <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {orders.map((order, index) => (
+            {localOrders.map((order, index) => (
               <Tr key={index}>
-                <Td>{order.foodItem}</Td>
+                <Td>{order.name}</Td>
                 <Td>
                   <HStack>
                     <IconButton
                       icon={<MinusIcon />}
                       aria-label="Decrease Quantity"
                       size="sm"
-                      isDisabled={order.quantity <= 1000}
-                      onClick={() => handleQuantityChange(index, -1000)}
+                      isDisabled={order.quantity <= 1}
+                      onClick={() => handleQuantityChange(index, -50)}
                     />
                     <Text>{order.quantity}</Text>
                     <IconButton
                       icon={<AddIcon />}
                       aria-label="Increase Quantity"
                       size="sm"
-                      onClick={() => handleQuantityChange(index, 1000)}
+                      onClick={() => handleQuantityChange(index, 50)}
                     />
                   </HStack>
                 </Td>
-                <Td>{order.total}</Td>
-                <Td>{order.orderId}</Td>
-                <Td>{order.deliveryDate}</Td>
                 <Td>
                   <Button
                     colorScheme="orange"
@@ -88,20 +99,22 @@ function Orders() {
   };
 
   const handleDeleteOrder = (index) => {
-    const newOrders = [...orders];
-    newOrders.splice(index, 1);
-    setOrders(newOrders);
+    dispatch(removeOrderItemAction(localOrders[index].id));
+    const updatedOrders = localOrders.filter((order, i) => i !== index);
+    console.log(updatedOrders)
+    setLocalOrders(updatedOrders);
+    console.log(state)
   };
 
   return (
     <Box p={4}>
       <Heading py={4}>Orders</Heading>
-      {orders.length > 0 ? (
+      {localOrders.length > 0 ? (
         renderOrdersTable()
       ) : (
         <Text>No orders yet.</Text>
       )}
-      {orders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
+      {localOrders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
         <>
           <Heading mt="8" size="md">
             Join a Group Order

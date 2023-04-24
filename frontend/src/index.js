@@ -3,11 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
-import orderReducer from './redux/reducers';
 import { Provider } from 'react-redux';
+import store from './redux/store';
 
-const store = createStore(orderReducer);
 ReactDOM.render(
   <Provider store={store}>
   <React.StrictMode>
