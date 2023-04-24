@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { VStack, HStack, Button, Input, FormControl, FormLabel, Grid, GridItem, Box, Heading, Image } from '@chakra-ui/react';
-import { FaPlus, FaMinus } from 'react-icons/fa';
-import { useDispatch, getState } from 'react-redux';
+
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { addOrderItemAction, removeOrderItemAction } from '../redux/action';
 import store from '../redux/store';
 
@@ -20,23 +20,23 @@ function Inventory() {
   const inventory = initialInventory;
   const [orderItems, setOrderItems] = useState([]);
   const [showButtons, setShowButtons] = useState({});
-
+  const [inputValues, setInputValues] = useState({});
   function addToOrder(item) {
     const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === item.id);
     const newOrderItem = {
-      id: item.id,
-      name: inventoryItem.name,
-      quantity: 50,
+      
     };
-    setOrderItems([...orderItems, newOrderItem]);
-    dispatch(addOrderItemAction(newOrderItem.id, newOrderItem.name, newOrderItem.quantity));
-    setShowButtons({ ...showButtons, [item.id]: false });
+    setOrderItems([...orderItems]);
+    setInputValues({ ...inputValues, [item.id]: '' });
+  
     console.log('Current store state:', store.getState());
   }
   function handleQuantityChange(itemId, event) {
 
     const inputValue = event.target.value;
     const newValue = inputValue === '' ? '' : parseInt(inputValue) || 0;
+
+    setInputValues({ ...inputValues, [itemId]: inputValue });
 
     const inventoryItem = inventory.find(inventoryItem => inventoryItem.id === itemId);
     if (newValue > inventoryItem.quantity) {
@@ -93,41 +93,40 @@ function Inventory() {
                         <>
                           <HStack>
                           <Input
-                          type="number"
-                          min="0"
-                          step="50"
-                          value={
-                            orderItems.find(orderItem => orderItem.id === item.id)
-                              ? orderItems.find(orderItem => orderItem.id === item.id).quantity
-                              : ""
-                            }
-                          onChange={(event) => handleQuantityChange(item.id, event)}
-                          size="sm"
-                          width="100px"
-                        />
-                        <Button
-                          onClick={() => {
-                            setShowButtons({ ...showButtons, [item.id]: true });
-                          }}
-                          colorScheme="orange"
-                          ml={2}
-                          >
-                          Add to Order
-                        </Button>
-                          </HStack>
-                        </>
-                    ) : (<>
-                      <Button
-                          onClick={() => {
-                            setShowButtons({ ...showButtons, [item.id]: true });
-                          }}
-                          colorScheme="orange"
-                          ml={2}
-                          >
-                          Add to Order
-                        </Button>
-                    </>)
-                    }
+                            type="number"
+                            min="0"
+                            step="50"
+                            value={inputValues[item.id] || ''}
+                            onChange={(event) => handleQuantityChange(item.id, event)}
+                            size="sm"
+                            width="100px"
+                          />
+                          <Button
+                        onClick={() => {
+                          addToOrder(item);
+                          setShowButtons((prevShowButtons) => {
+                            return { ...prevShowButtons, [item.id]: true };
+                          });
+                        }}
+                        colorScheme="orange"
+                        ml={2}
+                      >
+                        Add to Order
+                      </Button>
+                    </HStack>
+                  </>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      setShowButtons({ ...showButtons, [item.id]: true });
+                    }}
+                    colorScheme="orange"
+                    ml={2}
+                  >
+                    Add to Order
+                  </Button>
+                )
+              }
 
                 </VStack>
               </VStack>

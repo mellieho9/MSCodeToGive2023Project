@@ -23,3 +23,7 @@ export const updateOrderItemAction = (id, quantity) => {
   };
 };
 
+export const updateOrderItemQuantityAction = (id, quantity) => ({
+  type: 'UPDATE_ORDER_ITEM_QUANTITY',
+  payload: { id, quantity },
+});
