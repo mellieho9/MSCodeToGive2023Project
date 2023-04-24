@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { VStack, HStack, Button, Input, FormControl, FormLabel, Grid, GridItem, Box, Heading, Image } from '@chakra-ui/react';
-
+import logo from "../images/logo.png"
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import { addOrderItemAction, removeOrderItemAction } from '../redux/action';
 import store from '../redux/store';
@@ -85,6 +85,7 @@ function Inventory() {
               <Box p={4} borderWidth="1px" borderRadius="lg" minH="200" w="100%">
                 <VStack alignItems="center">
                   <Heading size="md" mb={2}>{item.name}</Heading>
+                  <Image src={logo} />
                   <Box mt={2}>Available: {inventory.find(invItem => invItem.id === item.id)?.quantity ?? 0} lbs</Box>
                   <Box ml={4} mb={4}>Expiry Date: {new Date(item.expiryDate).toLocaleDateString()}</Box>
                   <VStack spacing="4">
