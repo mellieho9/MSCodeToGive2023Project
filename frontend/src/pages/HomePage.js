@@ -12,8 +12,8 @@ function HomePage() {
       <Box backgroundColor={'#F7961D'} borderRadius={'15px'} display="flex" alignItems={"center"}>
         <Image src={smile} boxSize="300px" objectFit={'cover'} borderRadius={'15px 0 0 15px'}/>
         <Box ml={8} p={4} spacing={5}>
-          <Heading fontWeight={"medium"} color="white" fontSize="3xl" mb={5}>The center for Community Food, linking households and individuals in need with essential groceries.</Heading>
-          <HStack>
+          <Heading fontWeight={"medium"} color="white" fontSize="2xl" mb={5}>The center for Community Food, linking households and individuals in need with essential groceries.</Heading>
+          <Box >
             <Badge borderRadius={'2px'} color={'#FF7A00'} mr={4} fontSize="xl" py={2} px={4} backgroundColor='white'>Food is available</Badge> 
             <Link to="/order">
               <ChakraLink  display="flex" alignItems="center" color="white" fontSize="xl" _hover={{ textDecoration: "none", borderBottom: "2px solid white" }}>
@@ -21,7 +21,7 @@ function HomePage() {
                 Order Now
               </ChakraLink>
             </Link>
-          </HStack>          
+          </Box>          
         </Box>
       </Box>
       <VStack spacing={4}>

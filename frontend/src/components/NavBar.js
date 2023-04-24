@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Link as ChakraLink, Icon, Button, Image, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Link as ChakraLink, Icon, Button, Image, useDisclosure,} from "@chakra-ui/react";
 import { FaShoppingCart, FaTruck, FaMapMarkerAlt, FaBoxOpen, FaCalendarAlt, FaUser } from "react-icons/fa";
 import logo from '../images/logo.png';
 import PartnerInfo from "./PartnerInfo";
 import { useHistory } from "react-router-dom";
 
-function NavBar({ userRole, onLogout }) {
-  const isPartner = userRole === "partner";
-  const isAFCB = userRole === "afcb";
+function NavBar({ onLogout }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const history = useHistory();
@@ -30,7 +28,6 @@ function NavBar({ userRole, onLogout }) {
   
 
 
-
   return (
     <Flex bg="white" p="5" alignItems="center" boxShadow="md">
       <Box flex="1" display="flex" flexDirection="row">
@@ -39,7 +36,7 @@ function NavBar({ userRole, onLogout }) {
         </Link>
       </Box>
       <Box display="flex" flexDirection="row" alignItems="center" color="black">
-        {isPartner && (
+        {
           <>
             <Link to="/delivery-status">
               <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
@@ -65,23 +62,7 @@ function NavBar({ userRole, onLogout }) {
               </ChakraLink>
               <PartnerInfo isDrawerOpen={isDrawerOpen} onClose={handleDrawerClose} />
           </>
-        )}
-        {isAFCB && (
-          <>
-            <Link to="/map">
-              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
-                <Icon as={FaMapMarkerAlt} mr={2} />
-                Map
-              </ChakraLink>
-            </Link>
-            <Link to="/order">
-              <ChakraLink display="flex" alignItems="center" mr="4" _hover={{ textDecoration: "none", borderBottom: "2px solid orange" }}>
-                <Icon as={FaShoppingCart} mr={2} />
-                Orders
-              </ChakraLink>
-            </Link>
-          </>
-        )}
+        }
         <ChakraLink ml={4} mr={4} color="orange.500" _hover={{ textDecoration: "none", borderBottom: "2px solid orange"}} onClick={onLogout}>
           Logout
         </ChakraLink>

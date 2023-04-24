@@ -41,16 +41,16 @@ function Delivery2() {
         }
     };
     const progress = selectedDelivery ? getProgress(selectedDelivery.status) : 0;
-    const getStatusColor = (status) => {
+    const getETA = (status) => {
         switch (status) {
             case "pending":
-                return "orange";
+                return "2 weeks";
             case "in transit":
-                return "blue";
+                return "2 days";
             case "delivered":
-                return "green";
+                return "Already arrived";
             default:
-                return "gray";
+                return "";
         }
     };
 
@@ -86,11 +86,11 @@ function Delivery2() {
                                 <Th>ID</Th>
                                 <Th>Order</Th>
                                 <Th>Status</Th>
-                                <Th>Estimated Time of Arrival</Th>
+                                <Th>Estimated Time Of Arrival</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {deliveries.map((delivery) => (
+                            {deliveries.slice(0, deliveries.length/2).map((delivery) => (
                                 <Tr key={delivery['order_id']}
                                     onClick={() => setSelectedDelivery(delivery)}>
                                     <Td>{delivery['order_id']}</Td>
@@ -128,12 +128,12 @@ function Delivery2() {
                                                     color="green.500"
                                                 >
                                                     <FaCheck />
-                                                    {delivery['order_status']}
+                                                    {delivery["order_status"].charAt(0).toUpperCase() + delivery["order_status"].slice(1)}
                                                 </Text>
                                             )}
                                         </Flex>
                                     </Td>
-                                    <Td>{delivery.eta}</Td>
+                                    <Td>{getETA(delivery["order_status"])}</Td>
                                 </Tr>
                             ))}
                         </Tbody>
@@ -162,8 +162,9 @@ function Delivery2() {
                                     <FaCheck />
                                 </HStack>
                                 <Box display="flex" flexDirection="column" alignItems="center">
-                                    <Text fontSize="2xl" fontWeight="semibold">{selectedDelivery.status}</Text>
-                                    <Text fontSize="lg" fontWeight="light">{selectedDelivery.eta ? `ETA: ${selectedDelivery.eta}` : "No estimated time of arrival"}</Text>
+                                    <Text fontSize="2xl" fontWeight="semibold">{selectedDelivery["order_status"].charAt(0).toUpperCase() + selectedDelivery["order_status"].slice(1)}
+</Text>
+                                    <Text fontSize="lg" fontWeight="light">{getETA(selectedDelivery["order_status"]) ? `ETA: ${getETA(selectedDelivery["order_status"])}` : "No estimated time of arrival"}</Text>
                                 </Box>
                                 <Map delivery={selectedDelivery} />
                             </VStack>

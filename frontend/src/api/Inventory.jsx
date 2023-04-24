@@ -13,7 +13,8 @@ function Inventory() {
     fetch('http://localhost:3000/databases/inventory')
       .then(response => response.json())
       .then(data => {
-        setInitialInventory(data)})
+        setInitialInventory(data)
+      })
       .catch(error => console.log(error));
   }, []);
   const inventory = initialInventory;
@@ -28,12 +29,12 @@ function Inventory() {
       quantity: 50,
     };
     setOrderItems([...orderItems, newOrderItem]);
-    dispatch(addOrderItemAction(newOrderItem.id,newOrderItem.name,newOrderItem.quantity));
+    dispatch(addOrderItemAction(newOrderItem.id, newOrderItem.name, newOrderItem.quantity));
     setShowButtons({ ...showButtons, [item.id]: false });
     console.log('Current store state:', store.getState());
   }
   function handleQuantityChange(itemId, event) {
-    
+
     const inputValue = event.target.value;
     const newValue = inputValue === '' ? '' : parseInt(inputValue) || 0;
 
@@ -58,8 +59,8 @@ function Inventory() {
       dispatch(addOrderItemAction(itemId, inventoryItem.name, newValue));
       newInventory[inventoryItemIndex] = { ...inventoryItem, quantity: inventoryItem.quantity - newValue };
     }
-    
-    
+
+
 
     setOrderItems(newOrderItems);
     setInitialInventory(newInventory);
@@ -67,8 +68,8 @@ function Inventory() {
     console.log('Current store state:', store.getState());
   }
 
-  
-  
+
+
 
   function toggleButtons(id) {
     setShowButtons({ ...showButtons, [id]: !showButtons[id] });
@@ -87,36 +88,55 @@ function Inventory() {
                   <Box mt={2}>Available: {inventory.find(invItem => invItem.id === item.id)?.quantity ?? 0} lbs</Box>
                   <Box ml={4} mb={4}>Expiry Date: {new Date(item.expiryDate).toLocaleDateString()}</Box>
                   <VStack spacing="4">
-                    <Input
-                      type="number"
-                      min="0"
-                      step="50"
-                      value={
-                        orderItems.find(orderItem => orderItem.id === item.id)
-                          ? orderItems.find(orderItem => orderItem.id === item.id).quantity
-                          : ""
-                        }
-                      onChange={(event) => handleQuantityChange(item.id, event)}
-                      size="sm"
-                      width="100px"
-                    />
-                    <Button
-                      onClick={() => {
-                        setShowButtons({ ...showButtons, [item.id]: true });
-                      }}
-                      colorScheme="orange"
-                      ml={2}
-                      >
-                      Add to Order
-                    </Button>
-                  </VStack>
+                    {
+                      showButtons[item.id] ? (
+                        <>
+                          <HStack>
+                          <Input
+                          type="number"
+                          min="0"
+                          step="50"
+                          value={
+                            orderItems.find(orderItem => orderItem.id === item.id)
+                              ? orderItems.find(orderItem => orderItem.id === item.id).quantity
+                              : ""
+                            }
+                          onChange={(event) => handleQuantityChange(item.id, event)}
+                          size="sm"
+                          width="100px"
+                        />
+                        <Button
+                          onClick={() => {
+                            setShowButtons({ ...showButtons, [item.id]: true });
+                          }}
+                          colorScheme="orange"
+                          ml={2}
+                          >
+                          Add to Order
+                        </Button>
+                          </HStack>
+                        </>
+                    ) : (<>
+                      <Button
+                          onClick={() => {
+                            setShowButtons({ ...showButtons, [item.id]: true });
+                          }}
+                          colorScheme="orange"
+                          ml={2}
+                          >
+                          Add to Order
+                        </Button>
+                    </>)
+                    }
+
                 </VStack>
-              </Box>
+              </VStack>
+            </Box>
             </GridItem>
           ))}
-        </Grid>
-      </VStack>
-    </Box>
+      </Grid>
+    </VStack>
+    </Box >
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeOrderItemAction, updateOrderItemAction } from '../redux/action';
 import {
@@ -25,7 +25,7 @@ import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 function Orders() {
   const orders = useSelector((state) => state.orderItems);
   const dispatch = useDispatch();
-
+  const [orderComplete, setOrderComplete] = useState(false);
   const handleQuantityChange = (index, change) => {
     const orderToUpdate = orders[index];
     if (orderToUpdate) {
@@ -40,7 +40,7 @@ function Orders() {
 
   const handleCompleteOrder = () => {
     // Add logic to handle order completion
-    console.log('Order completed:', orders);
+    setOrderComplete(true)
   };
 
   const handleJoinGroupOrder = () => {
@@ -60,6 +60,7 @@ function Orders() {
             </Tr>
           </Thead>
           <Tbody>
+
             {orders.map((order, index) => (
               <Tr key={index}>
                 <Td>{order.name}</Td>
@@ -101,7 +102,7 @@ function Orders() {
   return (
     <Box p={4}>
       <Heading py={4}>Orders</Heading>
-      {orders.length > 0 ? (
+      {orders.length > 0 && !orderComplete ? (
         <>
           {renderOrdersTable()}
           <Button
@@ -114,7 +115,8 @@ function Orders() {
           </Button>
         </>
       ) : (
-        <Text>No orders yet.</Text>
+        orderComplete ? (<Text>Order complete! Check "Delivery status" to see its status. </Text>) : 
+        (<Text>No orders yet. Go to 'Available Items' to see possible items you can order.</Text>)
       )}
       {orders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
         <>

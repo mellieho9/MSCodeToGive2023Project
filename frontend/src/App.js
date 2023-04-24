@@ -57,7 +57,7 @@ function App() {
 
       {isLoggedIn && (
         <div>
-          <NavBar userRole="partner" onLogout={handleLogout} />
+          <NavBar onLogout={handleLogout} />
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route path="/order" component={OrderPage} />
