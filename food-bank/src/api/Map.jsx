@@ -1,110 +1,59 @@
-import React, { useState } from 'react';
-import './App.css';
-import Map from "./Map";
-import { Layers, TileLayer, VectorLayer } from "./Layers";
-import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
-import { osm, vector } from "./Source";
-import { fromLonLat, get } from 'ol/proj';
-import GeoJSON from 'ol/format/GeoJSON';
-import { Controls, FullScreenControl } from "./Controls";
+import React, { useEffect, useState, useRef } from "react";
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Icon, Input, Stack } from "@chakra-ui/react";
+import {FaMapMarkerAlt, FaTrashAlt} from "react-icons/fa";
 
-let styles = {
-  'MultiPolygon': new Style({
-    stroke: new Stroke({
-      color: 'blue',
-      width: 1,
-    }),
-    fill: new Fill({
-      color: 'rgba(0, 0, 255, 0.1)',
-    }),
-  }),
-};
-const geojsonObject = { ... }; // see full geojson object in Github
-const geojsonObject2 = { ... }; // see full geojson object in Github
-const MapComponent = () => {
-  const [center, setCenter] = useState([-94.9065, 38.9884]);
-  const [zoom, setZoom] = useState(9);
-  const [showLayer1, setShowLayer1] = useState(true);
-  const [showLayer2, setShowLayer2] = useState(true);
-return (
-  <div>
-    <Map center={fromLonLat(center)} zoom={zoom}>
-      <Layers>
-        <TileLayer
-          source={osm()}
-          zIndex={0}
-        />
-        {showLayer1 && (
-          <VectorLayer
-            source={vector({ features: new GeoJSON().readFeatures(geojsonObject, { featureProjection: get('EPSG:3857') }) })}
-            style={styles.MultiPolygon}
-          />
-        )}
-        {showLayer2 && (
-          <VectorLayer
-            source={vector({ features: new          GeoJSON().readFeatures(geojsonObject2, { featureProjection:               get('EPSG:3857') }) })}
-            style={styles.MultiPolygon}
-          />
-        )}
-      </Layers>
-      <Controls>
-        <FullScreenControl />
-      </Controls>
-    </Map>
-    <div>
-      <input
-        type="checkbox"
-        checked={showLayer1}
-        onChange={event => setShowLayer1(event.target.checked)}
-      /> Johnson County
-    </div>
-    <div>
-      <input
-        type="checkbox"
-        checked={showLayer2}
-        onChange={event => setShowLayer2(event.target.checked)}
-      /> Wyandotte County</div>
-    </div>
-  );
-}
-export default MapComponent;
-/*import React, { useState } from "react";
-import { MapContainer as Map, TileLayer, Marker, Popup } from "react-leaflet";
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Stack } from "@chakra-ui/react";
+
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import XYZ from 'ol/source/XYZ';
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import OSM from "ol/source/OSM";
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+import { fromLonLat } from "ol/proj";
+import { Icon as iconOL, Style } from "ol/style";
+
+
 import "../css/Map.css"
 
+
 function MapComponent() {
-  const [markers, setMarkers] = useState([]);
+  const [map, setMap] = useState();
+  const [marker, setMarker] = useState([]);
+ 
+  const mapRef = useRef(null);
 
-  // function to add a new marker to the map
-  function handleAddMarker(e) {
-    const { lat, lng } = e.latlng;
-    const newMarker = {
-      lat: lat,
-      lng: lng,
-    };
-    setMarkers([...markers, newMarker]);
-  }
 
-  return (
-    <Box className="MapContainer">
-      <Map
-        center={[33.753746, -84.386330]}
-        zoom={13}
-        onClick={(e) => handleAddMarker(e)}
-        style={{ height: "400px" }}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {markers.map((marker, index) => (
-          <Marker key={index} position={[marker.lat, marker.lng]} >
-            <Popup>
-              Marker {index + 1}: {marker.lat}, {marker.lng}
-            </Popup>
-          </Marker>
-        ))}
-      </Map>
-    </Box>
-  );
-}
+  //initial map here
+  useEffect(() => {
+    const initialMap = new Map({
+      target: 'map-container',
+      layers: [
+        new TileLayer({
+          source: new XYZ({
+            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+          })
+        }),
+      ],
 
-export default MapComponent;*/
+
+      view: new View({
+        center: fromLonLat([-84.386330, 33.753746]),
+        zoom: 15,
+      }),
+    });
+
+
+    setMap(initialMap);
+    return () => initialMap.dispose();
+  }, []);
+
+
+  return <div id="map-container" className="map" style={{ height: '400px', width:'50%', margin: "0 auto",}} />;
+};
+
+
+export default MapComponent;
+
