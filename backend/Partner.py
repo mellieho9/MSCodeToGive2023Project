@@ -15,5 +15,5 @@ class Partner:
             self.longitude = longitude
             self.latitude = latitude
 
-    def printPartner(self):
+    def print_partner(self):
         print(self.name, self.zipcode, self.latitude, self.longitude)

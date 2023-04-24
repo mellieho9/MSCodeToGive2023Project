@@ -4,5 +4,5 @@ class Order:
         self.partner = partner
         self.quantity = quantity
 
-    def toJson(self):
+    def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__)
