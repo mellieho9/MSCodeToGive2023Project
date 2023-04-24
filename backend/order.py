@@ -1,4 +1,6 @@
 import json
+
+
 class Order:
     def __init__(self, partner, quantity, order_id=0):
         self.partner = partner
