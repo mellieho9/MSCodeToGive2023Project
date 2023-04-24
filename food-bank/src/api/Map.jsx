@@ -92,7 +92,7 @@ function MapComponent() {
   }, []);
 
 
-  return <div id="map-container" className="map" style={{ height: '400px', width:'50%', margin: "0 auto",}} />;
+  return <div id="map-container" className="map" style={{ height: '600px', width:'100%', margin: "0 auto",}} />;
 };
 
 
