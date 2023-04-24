@@ -1,22 +1,18 @@
 from flask import Flask
 from Route import getRoutes
 from DummyData import generateData
-import json
-
-from backend.Order import Order
+import json 
 
 app = Flask(__name__)
 
-
 @app.route("/summary")
 def hello_world():
-    partnerOrders: list[Order] = generateData()
+    partnerOrders = generateData()
     print(len(partnerOrders))
     routes = getRoutes(partnerOrders)
     print(routes[0])
-    print(routes)
     response = app.response_class(
-        response=json.dumps(routes[1:]),
+        response=json.dumps([p.toJson() for p in partnerOrders]),
         status=200,
         mimetype='application/json'
     )

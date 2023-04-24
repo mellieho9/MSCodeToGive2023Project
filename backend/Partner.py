@@ -1,5 +1,3 @@
-import json
-
 import geopy
 
 geolocator = geopy.Nominatim(user_agent="check_1", timeout=10)
@@ -19,6 +17,3 @@ class Partner:
 
     def printPartner(self):
         print(self.name, self.zipcode, self.latitude, self.longitude)
-
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
