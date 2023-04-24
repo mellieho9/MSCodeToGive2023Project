@@ -1,5 +1,6 @@
 # Have to test this class
 import os
+import sqlite3
 
 from dotenv import load_dotenv
 
@@ -12,6 +13,18 @@ from order import Order
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
 ACFB = Partner("ACFB", "3400 N Desert Dr, East Point, GA 30344")
+
+# set up the routes database
+def init_routes_db():
+    conn = sqlite3.connect('routes.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS routes 		
+                 (route_id INTEGER PRIMARY KEY AUTOINCREMENT)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS orders
+                (order_id INTEGER PRIMARY KEY,
+                route_id INTEGER FOREIGN KEY REFERENCES routes(route_id))''')
+    conn.commit()
+    conn.close()
 
 
 # Calculates distance between two partner locations
@@ -116,7 +129,7 @@ def nearest_unvisited(current_order: Order, partner_orders: list[Order]):
     return closest_order
 
 
-def build_routes(partner_orders: list[Order]) -> list[list[Order]]:
+def build_routes(partner_orders: list[Order]):
     routes = []
     # While there are still partner orders to visit
     while len(partner_orders) > 0:
@@ -132,5 +145,13 @@ def build_routes(partner_orders: list[Order]) -> list[list[Order]]:
                 route.append(recent_node)
         # add the route to the list of routes
         routes.append(route)
-    # return the list of routes
-    return routes
+    # add the route to the database
+    for route in routes:
+        conn = sqlite3.connect('routes.db')
+        c = conn.cursor()
+        c.execute('INSERT INTO routes DEFAULT VALUES')
+        route_id = c.lastrowid
+        for order in route:
+            c.execute('INSERT INTO orders VALUES (?, ?)', (order.order_id, route_id))
+        conn.commit()
+        conn.close()
