@@ -31,7 +31,7 @@ function Inventory() {
     const newOrderItem = {
       id: item.id,
       name: inventoryItem.name,
-      quantity: 1,
+      quantity: 50,
     };
     setOrderItems([...orderItems, newOrderItem]);
     dispatch(addOrderItemAction(newOrderItem.id,newOrderItem.name,newOrderItem.quantity));
@@ -47,10 +47,10 @@ function Inventory() {
       
       if (index >= 0) {
         const newOrderItems = [...orderItems];
-        newOrderItems[index] = { ...newOrderItems[index],name: inventoryItem.name, quantity: newOrderItems[index].quantity + 1 };
+        newOrderItems[index] = { ...newOrderItems[index],name: inventoryItem.name, quantity: newOrderItems[index].quantity + 50 };
         console.log(newOrderItems)
         dispatch(removeOrderItemAction(itemId));
-        dispatch(addOrderItemAction(newOrderItems[index].id,newOrderItems[index].name,newOrderItems[index].quantity+1))
+        dispatch(addOrderItemAction(newOrderItems[index].id,newOrderItems[index].name,newOrderItems[index].quantity+50))
         console.log('Current store state:', store.getState());
         return newOrderItems;
       } else {
@@ -65,11 +65,11 @@ function Inventory() {
       const index = orderItems.findIndex(orderItem => orderItem.id === itemId);
       if (index >= 0) {
         const newOrderItems = [...orderItems];
-        const newQuantity = newOrderItems[index].quantity - 1;
+        const newQuantity = newOrderItems[index].quantity - 50;
         if (newQuantity > 0) {
           newOrderItems[index] = { ...newOrderItems[index], name: inventoryItem.name, quantity: newQuantity };
           dispatch(removeOrderItemAction(itemId));
-          dispatch(addOrderItemAction(newOrderItems[index].id,newOrderItems[index].name,newOrderItems[index].quantity-1))
+          dispatch(addOrderItemAction(newOrderItems[index].id,newOrderItems[index].name,newOrderItems[index].quantity-50))
           console.log('Current store state:', store.getState());
 
           return newOrderItems;
@@ -100,7 +100,7 @@ function Inventory() {
             <VStack>
               <Image src={item.image} alt={item.name} mb={2} />
               <Heading size="md" mb={2}>{item.name}</Heading>
-              <Box mt={2}>Available: {item.quantity}</Box>
+              <Box mt={2}>Available: {item.quantity} lbs</Box>
               <Box ml={4} mb={4}>Expiry Date: {item.expiryDate}</Box>
               {showButtons[item.id] > 0 ? (
                 <VStack  spacing="4">

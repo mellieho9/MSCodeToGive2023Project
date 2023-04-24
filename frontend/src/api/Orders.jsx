@@ -70,14 +70,14 @@ function Orders() {
                       aria-label="Decrease Quantity"
                       size="sm"
                       isDisabled={order.quantity <= 1}
-                      onClick={() => handleQuantityChange(index, -1)}
+                      onClick={() => handleQuantityChange(index, -50)}
                     />
                     <Text>{order.quantity}</Text>
                     <IconButton
                       icon={<AddIcon />}
                       aria-label="Increase Quantity"
                       size="sm"
-                      onClick={() => handleQuantityChange(index, 1)}
+                      onClick={() => handleQuantityChange(index, 50)}
                     />
                   </HStack>
                 </Td>
