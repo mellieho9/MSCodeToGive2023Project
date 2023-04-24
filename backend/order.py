@@ -1,25 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from datetime import datetime, timedelta
 import sqlite3
 
 app = Flask(__name__)
 CORS(app)
 
 app.config['SECRET_KEY'] = '134737323'
-
-# set up the partners database
-def init_partners_db():
-    conn = sqlite3.connect('partners.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS partners 
-                (email TEXT PRIMARY KEY,
-                 company_name TEXT,
-                 location TEXT,
-                 time_from TEXT,
-                 time_to TEXT,
-                 refrigeration_capacity INTEGER)''')
-    conn.commit()
-    conn.close()
 
 # set up the orders database
 def init_orders_db():
@@ -78,7 +65,7 @@ def check_order_below_6000_pounds(item_quantity_dict):
 # If the partner does not exist in the partners database, a 404 error is returned.
 # The function returns a JSON response indicating whether the order was successfully added 
 # and the order group it was added to.
-@app.route('/add_order', methods=['POST'])
+@app.route('/backend/add_order', methods=['POST'])
 def add_order():
     data = request.json
     email = data['email']
