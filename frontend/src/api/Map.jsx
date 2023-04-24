@@ -21,7 +21,8 @@ const MapComponent = () => {
     const response = await fetch("http://127.0.0.1:5000/summary");
     const data = await response.json();
     const parsedData = data.map((item) => JSON.parse(item[0]));
-
+    console.log("CHECK DATA");
+    console.log(parsedData);
     const markers = parsedData.map((item) => {
       if (!item.partner) return null;
       const { latitude, longitude, name } = item.partner;
