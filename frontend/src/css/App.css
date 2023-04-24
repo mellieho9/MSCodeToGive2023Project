@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f8f8;
+  padding: 1rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 1rem;
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+nav a:hover {
+  text-shadow: 0 0 5px #FF7A00;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+footer p {
+  margin: 0;
+  color: #666;
+}
+
+home-logo{
+  width: 100px;
+  height: 100px;
+}
