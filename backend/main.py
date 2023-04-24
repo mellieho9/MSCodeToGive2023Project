@@ -12,7 +12,7 @@ def hello_world():
     routes = getRoutes(partnerOrders)
     print(routes[0])
     response = app.response_class(
-        response=json.dumps([p.toJson() for p in partnerOrders]),
+        response=json.dumps([[p.toJson() for p in r] for r in routes]),
         status=200,
         mimetype='application/json'
     )

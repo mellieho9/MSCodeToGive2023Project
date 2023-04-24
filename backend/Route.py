@@ -55,7 +55,7 @@ def calculateDistance(srcPartner, destPartner):
     return duration
 
 # Calculates the distance from currPartner to the nextNearestPartner
-def nearestUnvisited(currNode, partnerOrders, routed):
+def nearestUnvisited(currNode, currNodeIdx, partnerOrders, routed):
     min = 10000000
     minIdx = -1
     ACFB = Partner("ACFB", 30344)
@@ -87,22 +87,22 @@ def nearestUnvisited(currNode, partnerOrders, routed):
     }
 
     for index in range(len(routed)):
-        if not routed[index]:
-            data['destinations'].append({
-                "waypoint": {
-                    "location": {
-                        "latLng": {
-                            "latitude": partnerOrders[index].partner.latitude,
-                            "longitude": partnerOrders[index].partner.longitude
-                        }
+        data['destinations'].append({
+            "waypoint": {
+                "location": {
+                    "latLng": {
+                        "latitude": partnerOrders[index].partner.latitude,
+                        "longitude": partnerOrders[index].partner.longitude
                     }
                 }
-            })
+            }
+        })
     response = requests.post(url, headers=headers, json=data)
+    print(response.json())
     for destination in response.json():
         # parse the float from the duration string, means eliminating last character and parsing
         duration = float(destination['duration'][:-1])
-        if duration < min:
+        if  currNodeIdx!=destination['destinationIndex'] and not routed[destination['destinationIndex']] and duration < min :
             min = duration
             minIdx = destination['destinationIndex']
     distanceFromACFB = calculateDistance(ACFB, partnerOrders[minIdx].partner)
@@ -112,7 +112,11 @@ def nearestUnvisited(currNode, partnerOrders, routed):
     else:
         return -1
 
-
+def leastUnvisited(routed):
+    for i in routed:
+        if not i:
+            return i
+    return -1
 # Returns all the routes for the partnerOrders that are in pending state
 def getRoutes(partnerOrders):
     n = len(partnerOrders)
@@ -120,16 +124,15 @@ def getRoutes(partnerOrders):
     i = 0
     routes = []
     ACFB = Partner("ACFB", "3400 N Desert Dr, East Point, GA 30344")
-    currTruckCapacity = 0
-    MAX_TRUCK_CAPACITY = 14000
-    while (i < n):
-        if routed[i]:
-            continue
+    MAX_TRUCK_CAPACITY = 2500
+    while (leastUnvisited(routed) != -1):
         route = []
         currNode = ACFB
+        currNodeIdx=-1
+        currTruckCapacity=0
         print(currNode.printPartner())
-        while currTruckCapacity < MAX_TRUCK_CAPACITY or any(False for x in routed):
-            nearestUnvisitedIdx = nearestUnvisited(currNode, partnerOrders, routed)
+        while currTruckCapacity < MAX_TRUCK_CAPACITY and leastUnvisited(routed)!=-1:
+            nearestUnvisitedIdx = nearestUnvisited(currNode, currNodeIdx, partnerOrders, routed)
             if nearestUnvisitedIdx == -1:
                 break
             nextNode = partnerOrders[nearestUnvisitedIdx]
@@ -137,16 +140,17 @@ def getRoutes(partnerOrders):
             routed[nearestUnvisitedIdx] = True
             currTruckCapacity += nextNode.quantity
             currNode = nextNode.partner
+            currNodeIdx=nearestUnvisitedIdx
             print(currNode.printPartner())
         routes.append(route)
         i = i + 1
-        
-    if currTruckCapacity >= 6000 and currTruckCapacity <= MAX_TRUCK_CAPACITY:
-        routes.insert(0,0)
-        return routes
-    elif currTruckCapacity < 6000:
-        routes.insert(0,-1)
-        return routes
-    else:
-        routes.insert(0,1)
-        return routes
+    return routes  
+    # if currTruckCapacity >= 6000 and currTruckCapacity <= MAX_TRUCK_CAPACITY:
+    #     routes.insert(0,0)
+    #     return routes
+    # elif currTruckCapacity < 6000:
+    #     routes.insert(0,-1)
+    #     return routes
+    # else:
+    #     routes.insert(0,1)
+    #     return routes
