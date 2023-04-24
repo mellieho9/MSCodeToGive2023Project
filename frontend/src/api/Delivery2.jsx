@@ -46,7 +46,7 @@ function Delivery2() {
     const getETA = (status) => {
         switch (status) {
             case "pending":
-                return "2 weeks";
+                return "1 week";
             case "in transit":
                 return "2 days";
             case "delivered":

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+
 import { removeOrderItemAction, updateOrderItemAction } from '../redux/action';
 import {
   Box,
@@ -118,33 +119,9 @@ function Orders() {
         orderComplete ? (<Text>Order complete! Check "Delivery status" to see its status. </Text>) : 
         (<Text>No orders yet. Go to 'Available Items' to see possible items you can order.</Text>)
       )}
-      {orders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
-        <>
-          <Heading mt="8" size="md">
-            Join a Group Order
-          </Heading>
-          <FormControl mt="4">
-            <FormLabel>Order ID</FormLabel>
-            <Input type="text" />
-          </FormControl>
-          <FormControl mt="4">
-          <FormLabel>Delivery Date and Time</FormLabel>
-            <Input type="datetime-local" />
-          </FormControl>
-          <Text mt="8" fontWeight="bold">
-            Available Groups:
-          </Text>
-          <List mt="4">
-            <ListItem>Group 1</ListItem>
-            <ListItem>Group 2</ListItem>
-            <ListItem>Group 3</ListItem>
-          </List>
-
-        </>
-      )}
+      
     </Box>
   );
 }
 
 export default Orders;
-

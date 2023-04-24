@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
 import OrderPage from './pages/OrderPage';
+import LoginPage from './pages/LoginPage';
 import DeliveryStatusPage from './pages/DeliveryStatusPage';
 import MapPage from './pages/MapPage';
 import InventoryPage from './pages/InventoryPage';
@@ -60,6 +61,7 @@ function App() {
           <NavBar onLogout={handleLogout} />
           <Switch>
             <Route exact path="/" component={HomePage} />
+            <Route path="/login" component={LoginPage} />
             <Route path="/order" component={OrderPage} />
             <Route path="/delivery-status" component={DeliveryStatusPage} />
             <Route path="/map" component={MapPage} />
