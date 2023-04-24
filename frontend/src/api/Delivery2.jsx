@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     VStack,
@@ -22,36 +22,19 @@ import "../css/Table.css"
 
 function Delivery2() {
     const [selectedDelivery, setSelectedDelivery] = useState(null);
-    const [deliveries, setDeliveries] = useState([
-        {
-            id: 1,
-            order: "Pizza, Cookies, and Salad",
-            status: "Pending",
-            location: { lat: 37.7749, lng: -122.4194 },
-            eta: null,
-        },
-        {
-            id: 2,
-            order: "Burger, Fries, and Soda",
-            status: "In Transit",
-            location: { lat: 37.7749, lng: -122.4194 },
-            eta: "10 mins",
-        },
-        {
-            id: 3,
-            order: "Sushi, Ramen, and Miso Soup",
-            status: "Delivered",
-            location: { lat: 37.7749, lng: -122.4194 },
-            eta: null,
-        },
-    ]);
+    const [deliveries, setDeliveries] = useState([]);
+    useEffect(() => {
+        fetch("http://localhost:3000/databases/orders/1")
+          .then((response) => response.json())
+          .then((data) => setDeliveries(data));
+      }, []);
     const getProgress = (status) => {
         switch (status) {
-            case "Pending":
+            case "pending":
                 return 25;
-            case "In Transit":
+            case "in transit":
                 return 50;
-            case "Delivered":
+            case "delivered":
                 return 100;
             default:
                 return 0;
@@ -60,11 +43,11 @@ function Delivery2() {
     const progress = selectedDelivery ? getProgress(selectedDelivery.status) : 0;
     const getStatusColor = (status) => {
         switch (status) {
-            case "Pending":
+            case "pending":
                 return "orange";
-            case "In Transit":
+            case "in transit":
                 return "blue";
-            case "Delivered":
+            case "delivered":
                 return "green";
             default:
                 return "gray";
@@ -108,36 +91,36 @@ function Delivery2() {
                         </Thead>
                         <Tbody>
                             {deliveries.map((delivery) => (
-                                <Tr key={delivery.id}
+                                <Tr key={delivery['order_id']}
                                     onClick={() => setSelectedDelivery(delivery)}>
-                                    <Td>{delivery.id}</Td>
-                                    <Td>{delivery.order}</Td>
+                                    <Td>{delivery['order_id']}</Td>
+                                    <Td>{Object.values(delivery['item_quantity_dict']).map((item) => item["name"]).join(', ')}</Td>
                                     <Td>
                                         <Flex alignItems="center">
-                                            {delivery.status === "Pending" && (
+                                            {delivery['order_status'] === "pending" && (
                                                 <Text
                                                     mr="2"
                                                     fontSize="md"
                                                     fontWeight="bold"
-                                                    color={getStatusColor(delivery.status)}
+                                                    color={"orange.300"}
                                                 >
                                                     <FaShippingFast />
-                                                    {delivery.status}
+                                                    {delivery['order_status']}
                                                 </Text>
 
                                             )}
-                                            {delivery.status === "In Transit" && (
+                                            {delivery['order_status'] === "in transit" && (
                                                 <Text
                                                     mr="2"
                                                     fontSize="md"
                                                     fontWeight="bold"
-                                                    color={getStatusColor(delivery.status)}
+                                                    color={"blue.400"}
                                                 >
                                                     <FaTruck />
-                                                    {delivery.status}
+                                                    {delivery['order_status']}
                                                 </Text>
                                             )}
-                                            {delivery.status === "Delivered" && (
+                                            {delivery['order_status'] === "delivered" && (
                                                 <Text
                                                     mr="2"
                                                     fontSize="md"
@@ -145,7 +128,7 @@ function Delivery2() {
                                                     color="green.500"
                                                 >
                                                     <FaCheck />
-                                                    {delivery.status}
+                                                    {delivery['order_status']}
                                                 </Text>
                                             )}
                                         </Flex>

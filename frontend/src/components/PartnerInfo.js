@@ -19,21 +19,27 @@ import {
 
 function PartnerInfo({isDrawerOpen, onClose}) {
 
-    const [partnerData, setPartnerData] = useState(null);
+    const [partnerData, setPartnerData] = useState({});
     const [editing, setEditing] = useState(false);
-
-    const [data, setData] = useState({ email: '', name: '' });
-    useEffect( async () => {
-        axios.get('http://localhost:3000/databases/currentUser')
+    
+      useEffect( async () => {
+        axios.get(`http://localhost:3000/databases/get_user_from_email/hey@gmail.com`)
           .then(response => {
-            setData(response.data);
-            console.log(data)
+            setPartnerData(response.data);
+            console.log(partnerData)
           })
           .catch(error => {
             console.log(error);
           });
       }, []);
-    
+
+      const handleInputChange = (event) => {
+        setPartnerData({
+            ...partnerData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
       const handleEditClick = () => {
         setEditing(true);
       };
@@ -49,19 +55,40 @@ function PartnerInfo({isDrawerOpen, onClose}) {
         });
       };
 
-    const handleSaveClick = () => {
-        // TODO: update partner data in database
-        setEditing(false);
+      const handleSaveClick = () => {
+        // Prepare the updated data
+        const updatedData = {
+            company_name: partnerData["company_name"],
+            location: partnerData["location"],
+            time_from: partnerData["time_from"],
+            time_to: partnerData["time_to"],
+            refrigeration_capacity: partnerData["refrigeration_capacity"]
+        };
+    
+        // Send a PUT request to update the user data
+        fetch(`http://localhost:3000/databases/update_user_from_email/hey@gmail.com`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setEditing(false);
+        })
+        .catch(error => console.error(error));
     };
 
     return (
         <>
-        {/*
+        {
             <Drawer isOpen={isDrawerOpen} onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton onClick={onClose} />
-                    <DrawerHeader>{partnerData.PartnerName}</DrawerHeader>
+                    <DrawerHeader>{partnerData["company_name"]}</DrawerHeader>
                     <DrawerBody>
                         <VStack align="stretch" spacing="4">
                             <FormControl>
@@ -70,24 +97,37 @@ function PartnerInfo({isDrawerOpen, onClose}) {
                                     <Input
                                         type="text"
                                         name="PartnerLocation"
-                                        value={partnerData.PartnerLocation}
+                                        value={partnerData["location"]}
                                         onChange={handleInputChange}
                                     />
                                 ) : (
-                                    <Box>{partnerData.PartnerLocation}</Box>
+                                    <Box>{partnerData["location"]}</Box>
                                 )}
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Availability Time (From):</FormLabel>
                                 {editing ? (
                                     <Input
-                                        type="datetime-local"
+                                        type="text"
                                         name="AvailabilityTimeFrom"
-                                        value={partnerData.AvailabilityTimeFrom}
+                                        value={partnerData["time_from"]}
                                         onChange={handleInputChange}
                                     />
                                 ) : (
-                                    <Box>{partnerData.AvailabilityTimeFrom}</Box>
+                                    <Box>{partnerData["time_from"]}</Box>
+                                )}
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Availability Time (To):</FormLabel>
+                                {editing ? (
+                                    <Input
+                                        type="text"
+                                        name="AvailabilityTimeTo"
+                                        value={partnerData["time_to"]}
+                                        onChange={handleInputChange}
+                                    />
+                                ) : (
+                                    <Box>{partnerData["time_to"]}</Box>
                                 )}
                             </FormControl>
                             <FormControl>
@@ -96,11 +136,11 @@ function PartnerInfo({isDrawerOpen, onClose}) {
                                     <Input
                                         type="number"
                                         name="RefrigerationCapacity"
-                                        value={partnerData.RefrigerationCapacity}
+                                        value={partnerData["refrigeration_capacity"]}
                                         onChange={handleInputChange}
                                     />
                                 ) : (
-                                    <Box>{partnerData.RefrigerationCapacity}</Box>
+                                    <Box>{partnerData["refrigeration_capacity"]}</Box>
                                 )}
                             </FormControl>
                             <FormControl>
@@ -123,7 +163,7 @@ function PartnerInfo({isDrawerOpen, onClose}) {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-        */}
+        }
         </>
     );
 }

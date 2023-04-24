@@ -90,9 +90,8 @@ function Inventory() {
     <Grid templateColumns="repeat(3, 1fr)" gap={6} w="100%">
       {inventory.map(item => (
         <GridItem key={item.id}>
-          <Box p={4} borderWidth="1px" borderRadius="lg" minH="350" w="100%">
-            <VStack>
-              <Image src={item.image} alt={item.name} mb={2} />
+          <Box p={4} borderWidth="1px" borderRadius="lg" minH="200" w="100%">
+            <VStack alignItems="center" >
               <Heading size="md" mb={2}>{item.name}</Heading>
               <Box mt={2}>Available: {item.quantity} lbs</Box>
               <Box ml={4} mb={4}>Expiry Date: {item.expiryDate}</Box>

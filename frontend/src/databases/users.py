@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request, make_response, session, redirect, url
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from flask_cors import CORS
-
+import random
+from datetime import datetime
 
 DATABASE = 'users.db'
 
@@ -85,6 +86,7 @@ def login():
 
     if user and check_password_hash(user[3], password):
         session['logged_in'] = True
+        session['email'] = email
          # redirect to the home page
         response = make_response(jsonify({'message': 'Login successful!'}), 200)
         response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5001'
@@ -108,9 +110,9 @@ def get_current_user():
         c.execute('SELECT name FROM users WHERE email = ?', (session['email'],))
         name = c.fetchone()[0]
         conn.close()
-        return jsonify({'name': name})
+        return jsonify({'email': session['email'],'name': name})
     else:
-        return jsonify({'name': ''})
+        return jsonify({'email':'','name': ''})
     
 # set up the inventory database
 def init_inventory_db():
@@ -205,16 +207,23 @@ def get_inventory():
     c.execute("SELECT * FROM inventory")
     items = c.fetchall()
     conn.close()
-    response = make_response(jsonify(items), 200)
+    
+    # Convert the array of tuples to a dictionary
+    inventory_dict = []
+    for item in items:
+        item_dict = {'id': item[0], 'name': item[1], 'quantity': item[2], 'expiryDate': item[3]}
+        inventory_dict.append(item_dict)
+
+    response = make_response(jsonify(inventory_dict), 200)
     response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5001'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     print(request.headers)
 
-    return response   
+    return response
 
-# set up the orders database
+
 def init_orders_db():
-    conn = get_db('orders.db')
+    conn = sqlite3.connect('orders.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS orders 
                 (order_id INTEGER PRIMARY KEY,
@@ -222,8 +231,75 @@ def init_orders_db():
                  order_status TEXT,
                  item_quantity_dict TEXT,
                  partners TEXT)''')
+    order1 = {
+        'order_date': '2023-04-23 14:23:45',
+        'order_status': 'in transit',
+        'item_quantity_dict': {
+            1: {'name': 'Apples', 'quantity': 2000, 'expiry_date': '2023-04-30 00:00:00.000'},
+            2: {'name': 'Oranges', 'quantity': 5000, 'expiry_date': '2023-05-15 00:00:00.000'},
+            3: {'name': 'Bananas', 'quantity': 1000, 'expiry_date': '2023-06-01 00:00:00.000'},
+        },
+        'partners': '[1, 3]',
+    }
+    c.execute("INSERT INTO orders (order_date, order_status, item_quantity_dict, partners) VALUES (?, ?, ?, ?)",
+              (order1['order_date'], order1['order_status'], str(order1['item_quantity_dict']), order1['partners']))
+    
+    order2 = {
+        'order_date': '2023-04-22 12:15:23',
+        'order_status': 'delivered',
+        'item_quantity_dict': {
+            4: {'name': 'Strawberries', 'quantity': 3000, 'expiry_date': '2023-05-07 00:00:00.000'},
+            5: {'name': 'Blueberries', 'quantity': 5000, 'expiry_date': '2023-05-08 00:00:00.000'},
+            6: {'name': 'Raspberries', 'quantity': 4000, 'expiry_date': '2023-05-10 00:00:00.000'},
+            7: {'name': 'Mangoes', 'quantity': 1000, 'expiry_date': '2023-05-18 00:00:00.000'},
+        },
+        'partners': '[1, 4, 5]',
+    }
+    c.execute("INSERT INTO orders (order_date, order_status, item_quantity_dict, partners) VALUES (?, ?, ?, ?)",
+              (order2['order_date'], order2['order_status'], str(order2['item_quantity_dict']), order2['partners']))
+    
+
+    order3 = {
+        'order_date': '2023-04-21 09:38:10',
+        'order_status': 'pending',
+        'item_quantity_dict': {
+            8: {'name': 'Pineapples', 'quantity': 15, 'expiry_date': '2023-05-23 00:00:00.000'},
+            9: {'name': 'Watermelons', 'quantity': 100, 'expiry_date': '2023-06-05 00:00:00.000'},
+            10: {'name': 'Grapes', 'quantity': 20, 'expiry_date': '2023-06-08 00:00:00.000'},
+            11: {'name': 'Lemons', 'quantity': 30, 'expiry_date': '2023-06-12 00:00:00.000'},
+        },
+        'partners': '[1, 2, 3, 4, 5]',
+    }
+    c.execute("INSERT INTO orders (order_date, order_status, item_quantity_dict, partners) VALUES (?, ?, ?, ?)",
+              (order3['order_date'], order3['order_status'], str(order3['item_quantity_dict']), order3['partners']))
+    
     conn.commit()
     conn.close()
+
+@app.route('/databases/orders/<int:partner_id>', methods=['GET'])
+def get_orders_by_partner(partner_id):
+    conn = get_db('orders.db')
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM orders WHERE partners LIKE ?", ('%' + str(partner_id) + '%',))
+    orders = c.fetchall()
+
+    conn.close()
+
+    if not orders:
+        return jsonify({'error': 'No orders found for partner ID ' + str(partner_id)}), 404
+
+    order_list = []
+    for order in orders:
+        order_dict = {}
+        order_dict['order_id'] = order[0]
+        order_dict['order_date'] = order[1]
+        order_dict['order_status'] = order[2]
+        order_dict['item_quantity_dict'] = eval(order[3])
+        order_dict['partners'] = eval(order[4])
+        order_list.append(order_dict)
+
+    return jsonify(order_list), 200
 
 # function to calculate the quantity of an order
 def calculate_order_quantity(item_quantity_dict):
@@ -351,6 +427,15 @@ def populate_partners_db():
     conn.commit()
     conn.close()
 
+@app.route('/databases/partners')
+def get_partner_ids():
+    conn = get_db('partners.db')
+    c = conn.cursor()
+    rows = c.execute("SELECT partner_id FROM partners").fetchall()
+    partner_ids = [row[0] for row in rows]
+    conn.close()
+    return jsonify({'partner_ids': partner_ids})
+
 @app.route('/databases/add_user', methods=['POST'])
 def add_user():
     data = request.json
@@ -369,7 +454,7 @@ def get_user(email):
     user = c.fetchone()
     conn.close()
     if user:
-        return jsonify({'email': user[0], 'company_name': user[1], 'location': user[2], 'time_from': user[3], 'time_to': user[4], 'refrigeration_capacity': user[5]})
+        return jsonify({'id':user[0],'email': user[1], 'company_name': user[2], 'location': user[3], 'time_from': user[4], 'time_to': user[5], 'refrigeration_capacity': user[6]})
     else:
         return jsonify({'error': 'User not found'})
     
@@ -381,11 +466,11 @@ def update_user(email):
     if not user:
         return jsonify({'error': 'User not found'})
     else:
-        company_name = request.json.get('company_name', user[1])
-        location = request.json.get('location', user[2])
-        time_from = request.json.get('time_from', user[3])
-        time_to = request.json.get('time_to', user[4])
-        refrigeration_capacity = request.json.get('refrigeration_capacity', user[5])
+        company_name = request.json.get('company_name', user[2])
+        location = request.json.get('location', user[3])
+        time_from = request.json.get('time_from', user[4])
+        time_to = request.json.get('time_to', user[5])
+        refrigeration_capacity = request.json.get('refrigeration_capacity', user[6])
         c.execute("UPDATE users SET company_name=?, location=?, time_from=?, time_to=?, refrigeration_capacity=? WHERE email=?", (company_name, location, time_from, time_to, refrigeration_capacity, email))
         conn.commit()
         conn.close()
@@ -436,6 +521,7 @@ def get_partner_info():
         'RefrigerationCapacity': user_data['refrigeration_capacity']
     }
     return jsonify(partner_data)
+
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)
