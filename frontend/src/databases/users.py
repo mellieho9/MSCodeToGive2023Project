@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request, make_response, session, redirect, url
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from flask_cors import CORS
+
+
 DATABASE = 'users.db'
 
 app = Flask(__name__)
@@ -40,8 +42,7 @@ def create_table():
         conn.close()
     
 
-@app.route('/backend/register', methods=['POST'])
-
+@app.route('/databases/register', methods=['POST'])
 def register():
     name = request.json.get('name')
     email = request.json.get('email')
@@ -71,9 +72,7 @@ def register():
         return response
         
 
-
-@app.route('/backend/login', methods=['POST'])
-
+@app.route('/databases/login', methods=['POST'])
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -101,7 +100,7 @@ def login():
 
         return response
     
-@app.route('/backend/currentUser', methods=['GET'])
+@app.route('/databases/currentUser', methods=['GET'])
 def get_current_user():
     if 'logged_in' in session and session['logged_in']:
         conn = get_db()
@@ -109,9 +108,9 @@ def get_current_user():
         c.execute('SELECT name FROM users WHERE email = ?', (session['email'],))
         name = c.fetchone()[0]
         conn.close()
-        return jsonify({'name': name})
+        return jsonify({'email': session['email'], 'name': name})
     else:
-        return jsonify({'name': ''})
+        return jsonify({'email':'','name': ''})
     
 
 if __name__ == '__main__':

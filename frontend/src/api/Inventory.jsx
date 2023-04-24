@@ -1,26 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VStack, HStack, Button, Input, FormControl, FormLabel, Grid, GridItem, Box, Heading, Image } from '@chakra-ui/react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { useDispatch, getState } from 'react-redux';
 import { addOrderItemAction, removeOrderItemAction } from '../redux/action';
 import store from '../redux/store';
 
-const initialInventory = [
-  { id: 1, name: 'Apples', quantity: 50, expiryDate: '2023-06-30', image: 'https://via.placeholder.com/150' },
-  { id: 2, name: 'Oranges', quantity: 25, expiryDate: '2023-07-15', image: 'https://via.placeholder.com/150' },
-  { id: 3, name: 'Bananas', quantity: 40, expiryDate: '2023-07-10', image: 'https://via.placeholder.com/150' },
-  { id: 4, name: 'Grapes', quantity: 30, expiryDate: '2023-06-20', image: 'https://via.placeholder.com/150' },
-  { id: 5, name: 'Strawberries', quantity: 20, expiryDate: '2023-06-22', image: 'https://via.placeholder.com/150' },
-  { id: 6, name: 'Blueberries', quantity: 35, expiryDate: '2023-07-01', image: 'https://via.placeholder.com/150' },
-  { id: 7, name: 'Raspberries', quantity: 15, expiryDate: '2023-06-18', image: 'https://via.placeholder.com/150' },
-  { id: 8, name: 'Watermelon', quantity: 10, expiryDate: '2023-07-05', image: 'https://via.placeholder.com/150' },
-  { id: 9, name: 'Pineapple', quantity: 5, expiryDate: '2023-07-08', image: 'https://via.placeholder.com/150' },
-  { id: 10, name: 'Mango', quantity: 15, expiryDate: '2023-07-12', image: 'https://via.placeholder.com/150' }
-];
-
 
 function Inventory() {
   const dispatch = useDispatch();
+  const [initialInventory, setInitialInventory] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:3000/databases/inventory')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setInitialInventory(data)})
+      .catch(error => console.log(error));
+  }, []);
   const inventory = initialInventory;
   const [orderItems, setOrderItems] = useState([]);
   const [showButtons, setShowButtons] = useState({});

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
     Box,
     Button,
@@ -17,41 +18,36 @@ import {
 } from '@chakra-ui/react';
 
 function PartnerInfo({isDrawerOpen, onClose}) {
-    // sample partner data
-    const initialPartnerData = {
-        PartnerId: 1,
-        PartnerName: 'John Doe',
-        PartnerLocation: '123 Main St, Anytown, USA',
-        AvailabilityTimeFrom: '2023-05-01T09:00:00Z',
-        AvailabilityTimeTo: '2023-05-01T17:00:00Z',
-        RefrigerationCapacity: 500,
-    };
 
-    const [partnerData, setPartnerData] = useState(initialPartnerData);
+    const [partnerData, setPartnerData] = useState(null);
     const [editing, setEditing] = useState(false);
 
-    const handleInputChange = (event) => {
-        setPartnerData({
-            ...partnerData,
-            [event.target.name]: event.target.value,
-        });
-    };
-
-    const handleEditClick = () => {
+    const [data, setData] = useState({ email: '', name: '' });
+    useEffect( async () => {
+        axios.get('http://localhost:3000/databases/currentUser')
+          .then(response => {
+            setData(response.data);
+            console.log(data)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }, []);
+    
+      const handleEditClick = () => {
         setEditing(true);
-    };
-
-    const handleCancelClick = () => {
+      };
+    
+      const handleCancelClick = () => {
         setEditing(false);
-        setPartnerData(initialPartnerData);
-    };
-
-    const handleLocationSelect = (place) => {
+      };
+    
+      const handleLocationSelect = (place) => {
         setPartnerData({
-            ...partnerData,
-            PartnerLocation: place.formatted_address,
+          ...partnerData,
+          PartnerLocation: place.formatted_address,
         });
-    };
+      };
 
     const handleSaveClick = () => {
         // TODO: update partner data in database
@@ -60,6 +56,7 @@ function PartnerInfo({isDrawerOpen, onClose}) {
 
     return (
         <>
+        {/*
             <Drawer isOpen={isDrawerOpen} onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>
@@ -126,6 +123,7 @@ function PartnerInfo({isDrawerOpen, onClose}) {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
+        */}
         </>
     );
 }

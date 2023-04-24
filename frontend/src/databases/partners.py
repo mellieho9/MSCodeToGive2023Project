@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
+from users import get_current_user
 
 app = Flask(__name__)
-CORS(app)
-
+CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = '134737323'
 
 # set up the partners database
@@ -50,7 +50,7 @@ def populate_partners_db():
     conn.commit()
     conn.close()
 
-@app.route('/backend/add_user', methods=['POST'])
+@app.route('/databases/add_user', methods=['POST'])
 def add_user():
     data = request.json
     conn = sqlite3.connect('partners.db')
@@ -60,7 +60,7 @@ def add_user():
     conn.close()
     return jsonify({'message': 'User added successfully.'}), 201
 
-@app.route('/backend/get_user_from_email/<email>', methods=['GET'])
+@app.route('/databases/get_user_from_email/<email>', methods=['GET'])
 def get_user(email):
     conn = sqlite3.connect('partners.db')
     c = conn.cursor()
@@ -72,7 +72,7 @@ def get_user(email):
     else:
         return jsonify({'error': 'User not found'})
     
-@app.route('/backend/update_user_from_email/<email>', methods=['PUT'])
+@app.route('/databases/update_user_from_email/<email>', methods=['PUT'])
 def update_user(email):
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
@@ -90,7 +90,7 @@ def update_user(email):
         conn.close()
         return jsonify({'message': 'User updated successfully'})
 
-@app.route('/backend/get_partner_by_id/<partner_id>', methods=['GET'])
+@app.route('/databases/get_partner_by_id/<partner_id>', methods=['GET'])
 def get_partner(partner_id):
     conn = sqlite3.connect('partners.db')
     c = conn.cursor()
@@ -102,7 +102,7 @@ def get_partner(partner_id):
     else:
         return jsonify({'error': 'Partner not found'})
 
-@app.route('/backend/update_partner_by_id/<partner_id>', methods=['PUT'])
+@app.route('/databases/update_partner_by_id/<partner_id>', methods=['PUT'])
 def update_partner(partner_id):
     conn = sqlite3.connect('partners.db')
     c = conn.cursor()
@@ -120,9 +120,23 @@ def update_partner(partner_id):
         conn.commit()
         conn.close()
         return jsonify({'message': 'Partner updated successfully'})
-    
 
-init_partners_db()
+@app.route('/databases/partner_info', methods=['GET'])
+def get_partner_info():
+    current_user = get_current_user()
+    email = current_user['email']
+    user_data = get_user(email)
+    partner_data = {
+        'PartnerId': user_data['id'],
+        'PartnerName': user_data['company_name'],
+        'PartnerLocation': user_data['location'],
+        'AvailabilityTimeFrom': user_data['time_from'],
+        'AvailabilityTimeTo': user_data['time_to'],
+        'RefrigerationCapacity': user_data['refrigeration_capacity']
+    }
+    return jsonify(partner_data)
+
 
 if __name__ == '__main__':
-    app.run()
+    init_partners_db()
+    app.run(port=3000, debug=True)

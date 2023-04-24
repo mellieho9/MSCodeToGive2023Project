@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)
-
+CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = '134737323'
 
 # set up the orders database
@@ -65,7 +64,7 @@ def check_order_below_6000_pounds(item_quantity_dict):
 # If the partner does not exist in the partners database, a 404 error is returned.
 # The function returns a JSON response indicating whether the order was successfully added 
 # and the order group it was added to.
-@app.route('/backend/add_order', methods=['POST'])
+@app.route('/databases/add_order', methods=['POST'])
 def add_order():
     data = request.json
     email = data['email']
@@ -103,3 +102,6 @@ def add_order():
             return jsonify({'message': f'Order added to new order group {order_id}.'}), 201
     else:
         return jsonify({'error': 'Partner not found.'}), 404
+
+if __name__ == '__main__':
+    app.run(port=3000, debug=True)

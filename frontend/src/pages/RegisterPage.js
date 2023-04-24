@@ -23,39 +23,40 @@ export const Register = (props) => {
     const [name, setName] = useState('');
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        if (!name) {
-          alert('Please enter your full name.');
-          return;
-        }
-        fetch('http://localhost:3000/backend/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: name, email: email, password: pass })
-          })
-          .then(response => {
-            if(response.status === 400){
-              response.json().then(data => {
-                setErrorMessage("Email is already registered. Please Login");
-              });
-            }
-            else if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            else// If the response is successful, redirect the user to the login page
-                window.location.href = '/login';
-          })
-          .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-          });
-    }
+      e.preventDefault();
+      
+      if (!name) {
+        alert('Please enter your full name.');
+        return;
+      }
 
-    const handleFormSwitch = (formName) => {
-        props.onFormSwitch(formName);
-      };
+      fetch('http://localhost:3000/databases/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name: name, email: email, password: pass })
+        })
+        .then(response => {
+          if(response.status === 400){
+            response.json().then(data => {
+              setErrorMessage("Email is already registered. Please Login");
+            });
+          }
+          else if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          else// If the response is successful, redirect the user to the login page
+              window.location.href = '/login';
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+  }
+
+  const handleFormSwitch = (formName) => {
+      props.onFormSwitch(formName);
+    };
 
     return (
 

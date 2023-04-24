@@ -4,8 +4,7 @@ import sqlite3
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5001'])
-
+CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = '134737323'
 
 # set up the inventory database
@@ -17,29 +16,10 @@ def init_inventory_db():
                  item_name TEXT,
                  available_amount INTEGER,
                  expiry_date TEXT)''')
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (1, 'Apples', 500, '2023-05-01 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (2, 'Oranges', 800, '2023-05-15 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (3, 'Bananas', 600, '2023-06-01 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (4, 'Strawberries', 400, '2023-05-07 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (5, 'Blueberries', 300, '2023-05-08 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (6, 'Raspberries', 700, '2023-05-10 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (7, 'Mangoes', 900, '2023-05-18 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (8, 'Pineapples', 400, '2023-05-23 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (9, 'Watermelons', 1000, '2023-06-05 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (10, 'Grapes', 600, '2023-06-08 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (11, 'Lemons', 300, '2023-06-12 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (12, 'Limes', 200, '2023-06-14 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (13, 'Cantaloupes', 400, '2023-06-18 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (14, 'Honeydews', 300, '2023-06-22 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (15, 'Pears', 500, '2023-06-25 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (16, 'Plums', 600, '2023-07-01 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (17, 'Cherries', 400, '2023-07-05 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (18, 'Grapefruits', 300, '2023-07-08 00:00:00.000')")
-    c.execute("INSERT INTO inventory (item_id, item_name, available_amount, expiry_date) VALUES (19, 'Tangerines', 500, '2023-07-15 00:00:00.000')")
     conn.commit()
     conn.close()
 
-@app.route('/backend/add_item', methods=['POST'])
+@app.route('/databases/add_item', methods=['POST'])
 def add_item():
     data = request.json
     conn = sqlite3.connect('inventory.db')
@@ -73,7 +53,7 @@ def update_item_expiry_date():
 
 
 # remove the item's quantity
-@app.route('/backend/remove_item_quantity', methods=['PUT'])
+@app.route('/databases/remove_item_quantity', methods=['PUT'])
 def remove_item_quantity():
     data = request.json
     item_id = data['item_id']
@@ -113,7 +93,7 @@ def remove_item_quantity():
     return response   
 
 #return inventory
-@app.route('/backend/inventory', methods=['GET'])
+@app.route('/databases/inventory', methods=['GET'])
 def get_inventory():
     conn = sqlite3.connect('inventory.db')
     c = conn.cursor()
@@ -132,4 +112,4 @@ init_inventory_db()
 #insert_items()
 update_item_expiry_date()
 if __name__ == '__main__':
-    app.run()
+    app.run(port=3000, debug=True)
