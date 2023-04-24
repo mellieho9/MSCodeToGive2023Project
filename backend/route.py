@@ -3,7 +3,7 @@ import os
 import sqlite3
 
 from dotenv import load_dotenv
-
+from flask_cors import CORS
 from partner import Partner
 import requests
 
@@ -146,15 +146,15 @@ def build_routes(partner_orders: list[Order]):
         # add the route to the list of routes
         routes.append(route)
     # first wipe the database
-    conn = sqlite3.connect('routes.db')
-    c = conn.cursor()
-    c.execute('DELETE FROM routes')
-    c.execute('DELETE FROM orders')
+    return routes
+    #conn = sqlite3.connect('routes.db')
+    #c = conn.cursor()
+   # c.execute('DELETE FROM routes')
+   # c.execute('DELETE FROM orders')
     # then add the new routes to the database
-    for route in routes:
-        c.execute('INSERT INTO routes DEFAULT VALUES')
-        route_id = c.lastrowid
-        for order in route:
-            c.execute('INSERT INTO orders VALUES (?, ?)', (order.order_id, route_id))
-        conn.commit()
-        conn.close()
+   # for route in routes:
+   #     c.execute('INSERT INTO routes DEFAULT VALUES')
+   ##     for order in route:
+   #         c.execute('INSERT INTO orders VALUES (?, ?)', (order.order_id, route_id))
+    #    conn.commit()
+    #    conn.close()

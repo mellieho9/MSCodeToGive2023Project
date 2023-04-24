@@ -1,5 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeOrderItemAction, updateOrderItemAction } from '../redux/action';
 import {
   Box,
   Button,
@@ -20,32 +21,31 @@ import {
   Text
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
-import { useDispatch, getState } from 'react-redux';
-import { removeOrderItemAction, updateOrderItemAction } from '../redux/action';
-import store from '../redux/store';
 
 function Orders() {
-  // const [orders, setOrders] = useState([{ foodItem: 'Apples', quantity: 2000, total: 5, orderId: 'ABC123', deliveryDate: '2023-05-01', }, { foodItem: 'Bananas', quantity: 3000, total: 7, orderId: 'DEF456', deliveryDate: '2023-05-02', },]);
+  const orders = useSelector((state) => state.orderItems);
   const dispatch = useDispatch();
-  const state = store.getState();
-  const orders = state.orderItems;
-  const [localOrders, setLocalOrders] = useState(orders);
-
-
-  useEffect(() => {
-    setLocalOrders(orders);
-  }, [orders]);
 
   const handleQuantityChange = (index, change) => {
-    const orderToUpdate = localOrders[index];
+    const orderToUpdate = orders[index];
     if (orderToUpdate) {
       const updatedOrder = { ...orderToUpdate, quantity: orderToUpdate.quantity + change };
-      const updatedOrders = [...localOrders];
-      updatedOrders[index] = updatedOrder;
-      setLocalOrders(updatedOrders);
       dispatch(updateOrderItemAction(updatedOrder.id, updatedOrder.quantity));
-      console.log(state)
     }
+  };
+
+  const handleDeleteOrder = (index) => {
+    dispatch(removeOrderItemAction(orders[index].id));
+  };
+
+  const handleCompleteOrder = () => {
+    // Add logic to handle order completion
+    console.log('Order completed:', orders);
+  };
+
+  const handleJoinGroupOrder = () => {
+    // Add logic to handle joining a group order
+    console.log('Joining a group order');
   };
 
   const renderOrdersTable = () => {
@@ -60,7 +60,7 @@ function Orders() {
             </Tr>
           </Thead>
           <Tbody>
-            {localOrders.map((order, index) => (
+            {orders.map((order, index) => (
               <Tr key={index}>
                 <Td>{order.name}</Td>
                 <Td>
@@ -98,23 +98,25 @@ function Orders() {
     );
   };
 
-  const handleDeleteOrder = (index) => {
-    dispatch(removeOrderItemAction(localOrders[index].id));
-    const updatedOrders = localOrders.filter((order, i) => i !== index);
-    console.log(updatedOrders)
-    setLocalOrders(updatedOrders);
-    console.log(state)
-  };
-
   return (
     <Box p={4}>
       <Heading py={4}>Orders</Heading>
-      {localOrders.length > 0 ? (
-        renderOrdersTable()
+      {orders.length > 0 ? (
+        <>
+          {renderOrdersTable()}
+          <Button
+            mt={4}
+            backgroundColor="#FF7A00"
+            color={'white'}
+            onClick={handleCompleteOrder}
+          >
+            Complete Order
+          </Button>
+        </>
       ) : (
         <Text>No orders yet.</Text>
       )}
-      {localOrders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
+      {orders.reduce((sum, order) => sum + order.quantity, 0) < 6000 && (
         <>
           <Heading mt="8" size="md">
             Join a Group Order
@@ -124,7 +126,7 @@ function Orders() {
             <Input type="text" />
           </FormControl>
           <FormControl mt="4">
-            <FormLabel>Delivery Date and Time</FormLabel>
+          <FormLabel>Delivery Date and Time</FormLabel>
             <Input type="datetime-local" />
           </FormControl>
           <Text mt="8" fontWeight="bold">
@@ -135,6 +137,7 @@ function Orders() {
             <ListItem>Group 2</ListItem>
             <ListItem>Group 3</ListItem>
           </List>
+
         </>
       )}
     </Box>
@@ -142,3 +145,4 @@ function Orders() {
 }
 
 export default Orders;
+
