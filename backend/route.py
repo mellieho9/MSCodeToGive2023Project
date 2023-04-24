@@ -59,7 +59,7 @@ def calculate_distance(src_partner, dest_partner):
     return duration
 
 
-# Calculates the distance from currPartner to the nextNearestPartner
+# Gets the order from partner_orders that is closest to the current order
 def nearest_unvisited(current_order: Order, partner_orders: list[Order]):
     minimum = float('inf')
     closest_order = None
