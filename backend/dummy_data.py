@@ -1,10 +1,10 @@
-from Order import Order
-from Partner import Partner
+from order import Order
+from partner import Partner
 
 
 # This method is used to generate data
-def create_partner_order(zipCode, name, quantity):
-    partner = Partner(name, zipCode)
+def create_partner_order(zip_code, name, quantity):
+    partner = Partner(name, zip_code)
     order = Order(partner, quantity)
     return order
 

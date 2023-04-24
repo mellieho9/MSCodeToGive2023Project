@@ -3,10 +3,10 @@ import os
 
 from dotenv import load_dotenv
 
-from Partner import Partner
+from partner import Partner
 import requests
 
-from Order import Order
+from order import Order
 
 # Load the API key from the .env file
 load_dotenv()

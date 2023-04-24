@@ -1,7 +1,7 @@
 import pytest
-from Route import nearest_unvisited, calculate_distance
-from backend.Partner import Partner
-from Order import Order
+from route import nearest_unvisited, calculate_distance
+from backend.partner import Partner
+from order import Order
 
 
 class TestRoute:

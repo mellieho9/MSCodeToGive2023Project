@@ -1,6 +1,6 @@
 from flask import Flask
-from Route import build_routes
-from DummyData import generate_data
+from route import build_routes
+from dummy_data import generate_data
 import json
 
 app = Flask(__name__)
