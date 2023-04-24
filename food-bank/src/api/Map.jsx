@@ -36,18 +36,59 @@ function MapComponent() {
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
           })
         }),
-      ],
 
+        new VectorLayer({
+          source: new VectorSource({
+            features: [
+              new Feature({
+                geometry: new Point(fromLonLat([20, 20])),
+                name: "Marker",
+              }),
+            ],
+          }),
+          style: new Style({
+            image: new iconOL({
+              anchor: [0.5, 46],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+            }),
+          }),
+        }),
+      ],
+      
 
       view: new View({
-        center: fromLonLat([-84.386330, 33.753746]),
+        center: fromLonLat([20, 20]),
         zoom: 15,
       }),
     });
 
+    // add marker
+    const markerSource = new VectorSource({
+      features: [
+        new Feature({
+          geometry: new Point(fromLonLat([20, 20])),
+        })
+      ]
+    });
 
+    const markerLayer = new VectorLayer({
+      source: markerSource,
+      style: new Style({
+        image: new iconOL({
+          src: '/path/to/your/marker-image.png',
+          anchor: [0.5, 1]
+        })
+      })
+    });
+
+    initialMap.addLayer(markerLayer);
     setMap(initialMap);
-    return () => initialMap.dispose();
+
+    return () => {
+      initialMap.dispose();
+    };
   }, []);
 
 
@@ -56,4 +97,3 @@ function MapComponent() {
 
 
 export default MapComponent;
-
