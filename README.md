@@ -7,7 +7,7 @@
 - Axios for connecting to the server
 
 ## Backend
-Python, Flask, NoSQL
+Python, Flask, SQL
 
 ##Setup Backend Dev Server
 * cd backend <br />
